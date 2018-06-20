@@ -203,8 +203,9 @@ double  newPsi(PSI_STATE * psi_state)
             freearr_(evs);
          }
 
-        //if (minimum_found){
        //observational entropy//       
+        
+        complx ** EN = makeEsN(pm, psiEs);
         newarr_(psiN,N);
         int y;      
         for(y=0;y < N;y++)
@@ -212,7 +213,7 @@ double  newPsi(PSI_STATE * psi_state)
          psiN[y]=0;
          for(iE=0;iE<N;iE++)
          {
-           psiN[y] += a[iE]*z[iE]*E[iE][y];
+           psiN[y] += a[iE]*z[iE]*EN[iE][y];
          }
          normN += SQR(creal(psiN[y]))+SQR(cimag(psiN[y]));
          }
@@ -549,6 +550,22 @@ double make_ran_state(int N,int M, complx ** E,complx ** newE, double * a, doubl
    return 1e10;
 }
 
+complx ** makeEsN(PARAMS * pm, double * evectors)
+{  
+   int i,j,N;
+   complx ** E;
+   N = pm->numstates;  
+   new2darr_(E,N,N);
+   for(i=0; i < N;i++)
+   { 
+     double * evector = evectors+N*i;
+     for(j=0; j < N;j++)
+     {  
+        E[i][j] = evector[j];
+     }
+   }
+   return E;
+}
 
 
 complx ** makeEs(PARAMS * pm, double * evectors)
