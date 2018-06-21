@@ -202,7 +202,7 @@ double  newPsi(PSI_STATE * psi_state)
             }
             freearr_(evs);
          }
-
+if (minimum_found){
        //observational entropy//       
         
         complx ** EN = makeEsN(pm, psiEs);
@@ -227,8 +227,8 @@ double  newPsi(PSI_STATE * psi_state)
          
   
            freearr_(derivs);
-           if (minimum_found)
-           return norm;
+           //if (minimum_found)
+           return norm;}
       }
       norm = 1.0/sqrt(norm);
       for(x=0;x < M;x++)
