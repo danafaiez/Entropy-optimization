@@ -277,8 +277,8 @@ _Complex double * psi_thermal(int  numstates, double beta, double * energy, doub
       
      double w = exp(-0.5*beta*energy[i]); 
      double * evector = evectors+numstates*i;
-      _Complex double coef = c_gaussian_random();
-      //double coef = gaussian_random();
+     _Complex double coef = c_gaussian_random();
+     // double coef = gaussian_random();
       coef *= w;
       for(j=0;j < numstates;j++)
       {
