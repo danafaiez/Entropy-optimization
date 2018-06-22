@@ -7,7 +7,7 @@
 #include "basis_states.h"
 #include "unitary.h"
 #include "ran.h"
-
+#include "min.h"
 #define THETA 0
 #define PHI 1
 #define PSI 2
@@ -159,8 +159,7 @@ double  newPsi(PSI_STATE * psi_state)
    complx * psi;
    complx * psiN;
    double norm;
-   double normN;
-   newarr_(psi,M);
+   newarr_(psi,M); 
    newarr_(z,N);
 
    for(i=0;i<N;i++)
@@ -193,7 +192,9 @@ double  newPsi(PSI_STATE * psi_state)
          
          if (deriv_error < 1e-10)
          {
-
+           minimum_found=1;
+           if (0)
+             {   
             double * evs = scndDerivEV(z,psi_state->J);
             if (evs[0] > -1e-10)
             {
@@ -201,31 +202,36 @@ double  newPsi(PSI_STATE * psi_state)
                minimum_found = 1;
             }
             freearr_(evs);
+            }
          }
-if (minimum_found){
+        
+ if (minimum_found){
        //observational entropy//       
         
-        complx ** EN = makeEsN(pm, psiEs);
         newarr_(psiN,N);
         int y;      
         for(y=0;y < N;y++)
         {
-         psiN[y]=0;
          for(iE=0;iE<N;iE++)
          {
-           psiN[y] += a[iE]*z[iE]*EN[iE][y];
+          double * evector = psiEs+N*iE; 
+          psiN[y] += a[iE]*z[iE]*evector[y];
          }
-         normN += SQR(creal(psiN[y]))+SQR(cimag(psiN[y]));
-         }
-         normN = 1.0/sqrt(normN);
-         for(y=0;y < N;y++){
-         psiN[y] *= normN;}
+       }
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
+        /*        
+         ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+         double * density_matrix = den(pm, psiN, binary_basis); 
+         printf("density_S:\n");
+         int index;
+         for (index=0;index < pm->L;index++){
+         printf("%lf\n",density_matrix[index]);}
+         */
          //freearr_(psiN);
          printf ("S_EX(unitary maxP) = %5f\n",S_o);
-         
-  
+              
+   
            freearr_(derivs);
            //if (minimum_found)
            return norm;}
@@ -548,23 +554,6 @@ double make_ran_state(int N,int M, complx ** E,complx ** newE, double * a, doubl
    gsl_vector_free(x);
    gsl_vector_free(ss);
    return 1e10;
-}
-
-complx ** makeEsN(PARAMS * pm, double * evectors)
-{  
-   int i,j,N;
-   complx ** E;
-   N = pm->numstates;  
-   new2darr_(E,N,N);
-   for(i=0; i < N;i++)
-   { 
-     double * evector = evectors+N*i;
-     for(j=0; j < N;j++)
-     {  
-        E[i][j] = evector[j];
-     }
-   }
-   return E;
 }
 
 

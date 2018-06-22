@@ -19,7 +19,7 @@ typedef struct {
    int i,j;
    PSI_STATE * psi_state;
 } PARAM_UNITARY;
-complx ** makeEsN(PARAMS * pm, double * evectors);
+//complx ** makeEsN(PARAMS * pm, double * evectors);
 double unitary_min(CG * cg, PARAMS * pm,  complx *coef, double * psiEs, double * energy);
 complx * make_coeffs(int n,int real_or_complx);
 double unitary_test(int N, int M);

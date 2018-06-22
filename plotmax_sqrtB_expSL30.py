@@ -43,8 +43,13 @@ maxp_lU_ht=[0.547476,0.459427,0.268296,0.108295,0.034217,0.009773,0.002769,0.000
 ##generic, t=1.3,tp=1.30,U=0.50,Up=0.48 localizing in the middle 5 sites
 maxp_lU_http_m5=[0.582759,0.486882,0.280570,0.108982,0.035328,0.011419,0.004038,0.001622, 0.000745,0.000389,0.000227]
 
+##generic, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites, real coef
+maxp_lU_hhttp_m5_real=[0.483725,0.479188,0.465970,0.328014,0.099650,0.020060,0.004115,0.001031,0.000334,0.000139,0.000071,0.000043,0.000029]
+
 ##generic, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites
-maxp_lU_hhttp_m5=[0.592194,0.409526,0.126771,0.025407, 0.005394,0.001460,0.000520,0.000236,0.000129, 0.000081,0.000056] 
+Beta2=[0,0.01,0.05,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1.6,1.8,2.0]
+sqrt_Beta2=np.sqrt(Beta2)
+maxp_lU_hhttp_m5=[0.592194,0.589317,0.572052,0.409526,0.126771,0.025407, 0.005394,0.001460,0.000520,0.000236,0.000129, 0.000081,0.000056] 
 
 ##generic, t=1.3,tp=1.30,U=0.50,Up=0.48 localizing in the end 5 sites
 maxp_lU_http_e5=[0.555551,0.442409,0.223202,0.072557,0.018237,0.004219,0.000992,0.000249,0.000068,0.000020,0.000007]
@@ -103,23 +108,26 @@ fig, ax = plt.subplots()
 #plt.scatter(sqrt_Beta,maxp_int_lowU_6,s=30,color='r',marker="o",label='L=30\nsize of box=6\n#particles=3\nIntegrable system:\nt=1.0,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
 ##plotting Pmax vs sqrtB, localization on first 5 sites, t=1.3,tp=1.30,U=0.50,Up=0.48
 #plt.scatter(sqrt_Beta,maxp_lU_http_m5,s=25,color='m',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.3,tp=1.30\nU=0.5,Up=0.48\ncomplex gaussian coef')
-plt.scatter(sqrt_Beta,maxp_lU_http_m5,s=25,color='m',marker="<",label='loc:middle 5 sites\nt=1.3,tp=1.30\nU=0.5,Up=0.48')
+#plt.scatter(sqrt_Beta,maxp_lU_http_m5,s=25,color='m',marker="<",label='loc:middle 5 sites\nt=1.3,tp=1.30\nU=0.5,Up=0.48')
 
 ##plotting Pmax vs sqrtB, localization on middle 5 sites,t=1.3,tp=1.30,U=0.50,Up=0.48 
 #plt.scatter(sqrt_Beta,maxp_lU_http_e5,s=25,color='b',marker="<",label='L=30\nlocalizing in first 5 sites\n#particles=3\nt=1.3,tp=1.30\nU=0.5,Up=0.48\ncomplex gaussian coef')
-plt.scatter(sqrt_Beta,maxp_lU_http_e5,s=25,color='b',marker="<",label='loc:first 5 sites\nt=1.3,tp=1.30\nU=0.5,Up=0.48')
+#plt.scatter(sqrt_Beta,maxp_lU_http_e5,s=25,color='b',marker="<",label='loc:first 5 sites\nt=1.3,tp=1.30\nU=0.5,Up=0.48')
 
 ##plotting Pmax vs sqrtB, generic, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites
-#plt.scatter(sqrt_Beta,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\ncomplex gaussian coef')
-plt.scatter(sqrt_Beta,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='loc.:middle 5 sites\nt=1.9,tp=1.90\nU=0.5,Up=0.48')
+plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\ncomplex gaussian coef')
+#plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='loc.:middle 5 sites\nt=1.9,tp=1.90\nU=0.5,Up=0.48')
+
+##plotting Pmax vs sqrtB, generic, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites, real coef
+plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5_real,s=25,color='g',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\nreal gaussian coef')
 
 ##plotting Pmax vs sqrtB,integrable, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the first 5 sites
 #plt.scatter(sqrt_Beta,maxp_int_lU_hhK_e5,s=25,color='g',marker="o",label='L=30\nlocalizing in first 5 sites\n#particles=3\nt=1.9,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
-plt.scatter(sqrt_Beta,maxp_int_lU_hhK_e5,s=25,color='g',marker="o",label='loc.:first 5 sites\nt=1.9,tp=0.00\nU=0.5,Up=0.00')
+#plt.scatter(sqrt_Beta,maxp_int_lU_hhK_e5,s=25,color='g',marker="o",label='loc.:first 5 sites\nt=1.9,tp=0.00\nU=0.5,Up=0.00')
 
 ##plotting Pmax vs sqrtB,integrable, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites
 #plt.scatter(sqrt_Beta,maxp_int_lU_hhK_m5,s=25,color='gray',marker="o",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
-plt.scatter(sqrt_Beta,maxp_int_lU_hhK_m5,s=25,color='gray',marker="o",label='loc.:middle 5 sites\nt=1.9,tp=0.00\nU=0.5,Up=0.00')
+#plt.scatter(sqrt_Beta,maxp_int_lU_hhK_m5,s=25,color='gray',marker="o",label='loc.:middle 5 sites\nt=1.9,tp=0.00\nU=0.5,Up=0.00')
 
 #plt.xticks(np.arange(0, 2, 0.1))
 

@@ -1,9 +1,11 @@
 #include "math.h"
 #include "defs.h"
 #include "basis_states.h"
+#include <time.h>
 
 double gaussian_random()
 {
+
    double rsq;
    double x,y;
    do 
@@ -19,6 +21,7 @@ double gaussian_random()
 
 complx c_gaussian_random()
 {
+srand(time(0));
    double x,y;
    double rsq;
    do 
