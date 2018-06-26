@@ -226,31 +226,46 @@ double  newPsi(PSI_STATE * psi_state)
          int index;
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
-        
+     
+        //building psi1 of size N, using psi of size M and the rest zero
+        //normalizing psi=psiM, then used to build psi1
          int ii,yy,jj,u,J;
          double norm1 = 0;
          double expE=0;
 	 complx * psi1;
          newarr_(psi1,N);
-        
-        //building psi1 of size N, using psi of size M and the rest zero
-          //normalizing psi=psiM, then used to build psi1
-          double normM = 0;
-          normM = 1.0/sqrt(norm);
-         //can probably be simplified/remove loops
+         double normM = 0;
+         normM = 1.0/sqrt(norm);
+         
+
+         //can probably be simplified/remove loops; this makes the 1st M
+         //elements of psi1 same as that of psi
+         /*
          for(jj=0;jj<M;jj++){
          psi1[jj] = psi[jj]*normM;}
          for(jj=M;jj<N;jj++){
          psi1[jj]=0;}
-      
-        
-        //normalizing psi1 that didn't work
+         */
+         //can probably be simplified/remove loops; this makes the last M
+         //elements of psi1 same as that of psi
+         for(jj=N-M;jj<N;jj++){
+         psi1[jj] = psi[jj+M-N]*normM;}
+         for(jj=0;jj<N-M;jj++){
+         psi1[jj]=0;}
+           
+
+   
+         //normalizing psi1 that didn't work
          //norm1 = 1/L2((double *) psi1,2*N);
          //for(J=0;J < N;J++){
          //psi1[J] *= norm1;}
+
+
           _Complex double * c;
           newarr_(c,N);
           for(ii=0;ii<N;ii++){
+
+
           c = coeff(psi1, size_(psi1), psiEs);
           expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
           printf("Energy of small box:\n");
@@ -259,7 +274,7 @@ double  newPsi(PSI_STATE * psi_state)
            //freearr_(psiN);
            printf ("S_EX(unitary maxP) = %5f\n",S_o);
            freearr_(derivs);
-       // if (minimum_found){
+      //  if (minimum_found){
            return norm;}
       }
       norm = 1.0/sqrt(norm);
