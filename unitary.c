@@ -246,13 +246,13 @@ double  newPsi(PSI_STATE * psi_state)
          for(jj=M;jj<N;jj++){
          psi1[jj]=0;}
          */
+         
          //can probably be simplified/remove loops; this makes the last M
          //elements of psi1 same as that of psi
          for(jj=N-M;jj<N;jj++){
          psi1[jj] = psi[jj+M-N]*normM;}
          for(jj=0;jj<N-M;jj++){
          psi1[jj]=0;}
-           
 
    
          //normalizing psi1 that didn't work
@@ -260,22 +260,17 @@ double  newPsi(PSI_STATE * psi_state)
          //for(J=0;J < N;J++){
          //psi1[J] *= norm1;}
 
-
           _Complex double * c;
           newarr_(c,N);
           for(ii=0;ii<N;ii++){
-
-
           c = coeff(psi1, size_(psi1), psiEs);
           expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
           printf("Energy of small box:\n");
-          printf("%lf\n",expE);
-         
-           //freearr_(psiN);
-           printf ("S_EX(unitary maxP) = %5f\n",S_o);
-           freearr_(derivs);
-      //  if (minimum_found){
-           return norm;}
+          //freearr_(psiN);
+          printf ("S_EX(unitary maxP) = %5f\n",S_o);
+          freearr_(derivs);
+          //if (minimum_found){
+          return norm;}
       }
       norm = 1.0/sqrt(norm);
       for(x=0;x < M;x++)
