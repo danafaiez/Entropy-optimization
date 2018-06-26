@@ -205,11 +205,10 @@ double  newPsi(PSI_STATE * psi_state)
             }
          }
         
- if (minimum_found){
+        if (minimum_found){
        //observational entropy//       
-        
-        newarr_(psiN,N);
-        int y;      
+         newarr_(psiN,N);
+         int y;      
         for(y=0;y < N;y++)
         {
          for(iE=0;iE<N;iE++)
@@ -220,20 +219,53 @@ double  newPsi(PSI_STATE * psi_state)
        }
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
-        /*        
+                
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix = den(pm, psiN, binary_basis); 
          printf("density_S:\n");
          int index;
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
-         */
-         //freearr_(psiN);
-         printf ("S_EX(unitary maxP) = %5f\n",S_o);
-              
-   
+        
+         int ii,yy,jj,u,J;
+         double norm1 = 0;
+         double expE=0;
+	 complx * psi1;
+         newarr_(psi1,N);
+        
+        //building psi1 of size N, using psi of size M and the rest zero
+          //normalizing psi=psiM, then used to build psi1
+          complx * psiM;
+          newarr_(psiM,M);
+          double normM = 0;
+          normM = 1.0/sqrt(norm);
+          for(x=0;x < M;x++){
+          psiM[x]=psi[x]*normM;}
+      
+         //can probably be simplified/remove loops
+        
+         for(jj=0;jj<M;jj++){
+         psi1[jj] = psiM[jj];}
+         for(jj=M;jj<N;jj++){
+         psi1[jj]=0;}
+      
+        
+        //normalizing psi1 that didn't work
+         //norm1 = 1/L2((double *) psi1,2*N);
+         //for(J=0;J < N;J++){
+         //psi1[J] *= norm1;}
+          _Complex double * c;
+          newarr_(c,N);
+          for(ii=0;ii<N;ii++){
+          c = coeff(psi1, size_(psi1), psiEs);
+          expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
+          printf("Energy of small box:\n");
+          printf("%lf\n",expE);
+         
+           //freearr_(psiN);
+           printf ("S_EX(unitary maxP) = %5f\n",S_o);
            freearr_(derivs);
-           //if (minimum_found)
+       // if (minimum_found){
            return norm;}
       }
       norm = 1.0/sqrt(norm);
