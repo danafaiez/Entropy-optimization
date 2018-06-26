@@ -782,8 +782,8 @@ ull ** calc_regions(PARAMS * pm)//for the moment, the special case of just two s
    for(i=0; i < pm->numstates; i++)
    {
       unsigned long s = binary_basis[i];
-     // if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
-      if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+      if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
+     // if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
        {
          appendarr_(regions[IN],i);
       }
