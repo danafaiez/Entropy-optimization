@@ -235,17 +235,11 @@ double  newPsi(PSI_STATE * psi_state)
         
         //building psi1 of size N, using psi of size M and the rest zero
           //normalizing psi=psiM, then used to build psi1
-          complx * psiM;
-          newarr_(psiM,M);
           double normM = 0;
           normM = 1.0/sqrt(norm);
-          for(x=0;x < M;x++){
-          psiM[x]=psi[x]*normM;}
-      
          //can probably be simplified/remove loops
-        
          for(jj=0;jj<M;jj++){
-         psi1[jj] = psiM[jj];}
+         psi1[jj] = psi[jj]*normM;}
          for(jj=M;jj<N;jj++){
          psi1[jj]=0;}
       
