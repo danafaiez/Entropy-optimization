@@ -228,23 +228,26 @@ double  newPsi(PSI_STATE * psi_state)
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
      
-         int ii,yy,jj,u,J;
+         int u,J,l,ii;
          double norm1 = 0;
          double expE=0;
 	 complx * psi1;
          newarr_(psi1,N);
          
         complx ** W = makeEN(pm, psiEs);
-  	for(i=0;i<N;i++)
+  	for(u=0;u<N;u++)
          {
-         for(j=0;j<N;j++)
+         for(J=0;J<N;J++)
           {
-       psi1[i] += a[j]*z[j]*W[j][i];
+       psi1[u] += a[J]*z[J]*W[J][u];
           }
          }        
-        norm1 = 1/L2((double *) psi1,2*N);
-        for(J=0;J < N;J++){
-        psi1[J] *= norm1;} 
+       
+        for(x=0;x < N;x++){
+        norm1 += SQR(creal(psi1[x]))+SQR(cimag(psi1[x]));}
+        norm1 = 1.0/sqrt(norm1);
+        for(l=0;l < N;l++){
+        psi1[l] *= norm1;} 
         
           _Complex double * c;
           newarr_(c,N);
