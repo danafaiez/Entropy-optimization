@@ -251,8 +251,8 @@ double  newPsi(PSI_STATE * psi_state)
         
           _Complex double * c;
           newarr_(c,N);
-          for(ii=0;ii<N;ii++){
           c = coeff(psi1, size_(psi1), psiEs);
+          for(ii=0;ii<N;ii++){
           expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
           printf("Energy of small box:\n");
           printf("%lf\n",expE);
