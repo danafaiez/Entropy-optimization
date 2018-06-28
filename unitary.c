@@ -219,7 +219,8 @@ double  newPsi(PSI_STATE * psi_state)
        }
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
-                
+         printf ("S_EX(unitary maxP) = %5f\n",S_o); 
+       
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix = den(pm, psiN, binary_basis); 
          printf("density_S:\n");
@@ -227,49 +228,33 @@ double  newPsi(PSI_STATE * psi_state)
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
      
-        //building psi1 of size N, using psi of size M and the rest zero
-        //normalizing psi=psiM, then used to build psi1
          int ii,yy,jj,u,J;
          double norm1 = 0;
          double expE=0;
 	 complx * psi1;
          newarr_(psi1,N);
-         double normM = 0;
-         normM = 1.0/sqrt(norm);
          
-
-         //can probably be simplified/remove loops; this makes the 1st M
-         //elements of psi1 same as that of psi
-         /*
-         for(jj=0;jj<M;jj++){
-         psi1[jj] = psi[jj]*normM;}
-         for(jj=M;jj<N;jj++){
-         psi1[jj]=0;}
-         */
-         
-         //can probably be simplified/remove loops; this makes the last M
-         //elements of psi1 same as that of psi
-         for(jj=N-M;jj<N;jj++){
-         psi1[jj] = psi[jj+M-N]*normM;}
-         for(jj=0;jj<N-M;jj++){
-         psi1[jj]=0;}
-
-   
-         //normalizing psi1 that didn't work
-         //norm1 = 1/L2((double *) psi1,2*N);
-         //for(J=0;J < N;J++){
-         //psi1[J] *= norm1;}
-
+        complx ** W = makeEN(pm, psiEs);
+  	for(i=0;i<N;i++)
+         {
+         for(j=0;j<N;j++)
+          {
+       psi1[i] += a[j]*z[j]*W[j][i];
+          }
+         }        
+        norm1 = 1/L2((double *) psi1,2*N);
+        for(J=0;J < N;J++){
+        psi1[J] *= norm1;} 
+        
           _Complex double * c;
           newarr_(c,N);
           for(ii=0;ii<N;ii++){
           c = coeff(psi1, size_(psi1), psiEs);
           expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
           printf("Energy of small box:\n");
-          //freearr_(psiN);
-          printf ("S_EX(unitary maxP) = %5f\n",S_o);
+          printf("%lf\n",expE);
           freearr_(derivs);
-          //if (minimum_found){
+
           return norm;}
       }
       norm = 1.0/sqrt(norm);
@@ -288,6 +273,35 @@ double  newPsi(PSI_STATE * psi_state)
    }
    //freearr_rr_(psi);
    return 1e10;
+}
+
+complx ** makeEN(PARAMS * pm, double * evectors)
+{
+ //ull * basis_size =  init_bases(pm->num_bath_sites, pm->num_sites, pm->num_particles);
+   unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites, pm->num_particles);
+  // ull * regions = (calc_regions(pm))[0];
+   int i,j;
+   int N = pm->numstates;
+   complx ** W;
+   new2darr_(W,N,N);
+   for(i=0;i<N;i++)
+   {
+   double * evector = evectors+N*i;
+   for(j=0;j<N;j++)
+   {
+      unsigned long s = binary_basis[j];
+      if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
+     // if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+       {
+       W[i][j] = evector[j];
+       }
+      else
+      {
+     W[i][j] = 0;   
+      }
+   }
+   }
+   return W;
 }
 
 double ** makeJ(PSI_STATE * psi_state)
@@ -325,7 +339,8 @@ complx * make_unitary_matrix2(double * angles)
       return arr;
 }
 
-complx ** make_trans_state2(PSI_STATE * psi_state, double * angles ,int i, int j)
+complx ** make_trans_state2(PSI_STATE * psi_state, double * angles ,int i, int
+j)
 {
    complx ** newE = psi_state->newE;
    complx ** E = psi_state->E;
@@ -468,7 +483,8 @@ double minEunitary( const gsl_vector * x, void * params)
    return e;
 }
 
-double make_ran_state(int N,int M, complx ** E,complx ** newE, double * a, double **J)
+double make_ran_state(int N,int M, complx ** E,complx ** newE, double * a,
+double **J)
 {
    int num_descents = 0;
    int max_num_descents = 20;
@@ -546,9 +562,12 @@ double make_ran_state(int N,int M, complx ** E,complx ** newE, double * a, doubl
 
             if (status == GSL_SUCCESS)
             {
-               printf ("S converged to minimum %g, min_so_far = %g\n",s->fval, min_so_far);
+               printf ("S converged to minimum %g, min_so_far = %g\n",s->fval,
+min_so_far);
             }   
-            //printf ("%d [%g,%g,%g] f() = %g size = %g\n",iter,gsl_vector_get(s->x,0),gsl_vector_get(s->x,1),gsl_vector_get (s->x,2),s->fval,size);
+            //printf ("%d [%g,%g,%g] f() = %g size =
+            //%g\n",iter,gsl_vector_get(s->x,0),gsl_vector_get(s->x,1),gsl_vector_get
+            //(s->x,2),s->fval,size);
          }
          while (status == GSL_CONTINUE && iter < 1000);
 
@@ -656,7 +675,8 @@ double * cabs_array(complx * carray)
    return arr;
 }
 
-double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * energy)
+double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double *
+energy)
 {
    complx ** E =  makeEs(pm, psiEs);
    complx ** newE;
@@ -769,7 +789,8 @@ double unitary_test(int N, int M)
    double psi=maxEsite(a,E,0);
    printf("maxEsite[E,0] = %lf\n",psi*psi);
    complx * s0 = normali2(newE,0);
-  // printf("energy_complex(psi_state,s0) = %lf\n", energy_complex(&psi_state,s0));
+  // printf("energy_complex(psi_state,s0) = %lf\n",
+  // energy_complex(&psi_state,s0));
 #if 0
    PARAM_UNITARY param_unitary;
    psi_state.N = N;
@@ -818,4 +839,3 @@ double unitary_test(int N, int M)
 //  return minimum;
   return 0;
 }
-
