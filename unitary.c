@@ -220,14 +220,14 @@ double  newPsi(PSI_STATE * psi_state)
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          printf ("S_EX(unitary maxP) = %5f\n",S_o); 
-       
+      /* 
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix = den(pm, psiN, binary_basis); 
          printf("density_S:\n");
          int index;
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
-     
+     */
          int u,J,l,ii;
          double norm1 = 0;
          double expE=0;
@@ -296,11 +296,13 @@ complx ** makeEN(PARAMS * pm, double * evectors)
       if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
      // if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
        {
-       W[i][j] = evector[j];
-       }
+      W[i][j] = evector[j];
+     // W[i][j] = 0;
+        }
       else
       {
-     W[i][j] = 0;   
+   W[i][j] = 0;   
+  // W[i][j] = evector[j];
       }
    }
    }
