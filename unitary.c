@@ -220,35 +220,54 @@ double  newPsi(PSI_STATE * psi_state)
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          printf ("S_EX(unitary maxP) = %5f\n",S_o); 
-      /* 
+
+//calculating number density
+      
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix = den(pm, psiN, binary_basis); 
          printf("density_S:\n");
          int index;
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
-     */
-         int u,J,l,ii;
-         double norm1 = 0;
+     
+//calculating psi1 using psiEs and region
+/*
+         int i,j,u,J,l,ii;
          double expE=0;
 	 complx * psi1;
          newarr_(psi1,N);
-         
+ 
+	ull * regions = (calc_regions(pm))[0];
+	int size = size_(regions);
+	for (i=0;i<N;i++){
+	u=0;
+        while (u<size)
+	if (i ==regions[u]){
+	for (j=0;j<N;j++){
+	double * evector = psiEs+N*j;
+	psi1[i] += a[j]*z[j]*evector[i];}  break;}  //j loop closed; if loop closed 
+	else{
+	if (u==size){
+	psi1[i]=0;
+	break;}
+	else
+	u++;}} //else loop closed, i loop closed
+
+
+*/
+//calculating psi1 using W  
+  
+        double expE=0; 
+        int u,J,l,ii;
+        complx * psi1;
+        newarr_(psi1,N);
         complx ** W = makeEN(pm, psiEs);
-  	for(u=0;u<N;u++)
-         {
-         for(J=0;J<N;J++)
-          {
-       psi1[u] += a[J]*z[J]*W[J][u];
-          }
-         }        
-       
-        for(x=0;x < N;x++){
-        norm1 += SQR(creal(psi1[x]))+SQR(cimag(psi1[x]));}
-        norm1 = 1.0/sqrt(norm1);
-        for(l=0;l < N;l++){
-        psi1[l] *= norm1;} 
-        
+  	for(u=0;u<N;u++){
+        for(J=0;J<N;J++){
+       psi1[u] += a[J]*z[J]*W[J][u];}}        
+          
+
+//calculating <E>  
           _Complex double * c;
           newarr_(c,N);
           c = coeff(psi1, size_(psi1), psiEs);
@@ -257,6 +276,9 @@ double  newPsi(PSI_STATE * psi_state)
           printf("Energy of small box:\n");
           printf("%lf\n",expE);
           freearr_(derivs);
+
+//calculating entanglement entropy....
+
 
           return norm;}
       }
@@ -280,13 +302,13 @@ double  newPsi(PSI_STATE * psi_state)
 
 complx ** makeEN(PARAMS * pm, double * evectors)
 {
- //ull * basis_size =  init_bases(pm->num_bath_sites, pm->num_sites, pm->num_particles);
    unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites, pm->num_particles);
-  // ull * regions = (calc_regions(pm))[0];
+   ull * regions = (calc_regions(pm))[0];
    int i,j;
    int N = pm->numstates;
    complx ** W;
    new2darr_(W,N,N);
+   int x_begin= (N - pm->num_bath_sites)/2;
    for(i=0;i<N;i++)
    {
    double * evector = evectors+N*i;
@@ -294,21 +316,53 @@ complx ** makeEN(PARAMS * pm, double * evectors)
    {
       unsigned long s = binary_basis[j];
       if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
-     // if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+   //   if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
        {
       W[i][j] = evector[j];
-     // W[i][j] = 0;
+   //   W[i][j] = 0;
         }
       else
-      {
-   W[i][j] = 0;   
-  // W[i][j] = evector[j];
-      }
+       {
+     W[i][j] = 0;   
+     // W[i][j] = evector[j];
+       } 
    }
    }
    return W;
 }
 
+/*
+complx ** makeEN(PARAMS * pm, double * evectors)
+{
+  // unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites, pm->num_particles
+   ull * regions = (calc_regions(pm))[0];
+   int i,j,u;
+   int N = pm->numstates;
+   complx ** W;
+   new2darr_(W,N,N);
+   int x_begin= (N - pm->num_bath_sites)/2;
+   for(i=0;i<N;i++)
+   {
+   double * evector = evectors+N*i;
+   for(j=0;j<N;j++)
+   {
+      //for(u=u;u<size_(regions);u++){ 
+       if (regions[]==j)
+        {
+      W[i][j] = evector[j];
+   //   W[i][j] = 0;
+        }
+      else
+       {
+     W[i][j] = 0;   
+     // W[i][j] = evector[j];
+       } 
+   }
+   }
+   return W;
+}
+
+*/
 double ** makeJ(PSI_STATE * psi_state)
 {
    int i,j,k;
