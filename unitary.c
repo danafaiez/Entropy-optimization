@@ -231,7 +231,7 @@ double  newPsi(PSI_STATE * psi_state)
          printf("%lf\n",density_matrix[index]);}
      
 //calculating psi1 using psiEs and region
-/*
+
          int i,j,u,J,l,ii;
          double expE=0;
 	 complx * psi1;
@@ -254,9 +254,9 @@ double  newPsi(PSI_STATE * psi_state)
 	u++;}} //else loop closed, i loop closed
 
 
-*/
+
 //calculating psi1 using W  
-  
+/*  
         double expE=0; 
         int u,J,l,ii;
         complx * psi1;
@@ -266,7 +266,7 @@ double  newPsi(PSI_STATE * psi_state)
         for(J=0;J<N;J++){
        psi1[u] += a[J]*z[J]*W[J][u];}}        
           
-
+*/
 //calculating <E>  
           _Complex double * c;
           newarr_(c,N);
@@ -277,7 +277,7 @@ double  newPsi(PSI_STATE * psi_state)
           printf("%lf\n",expE);
           freearr_(derivs);
 
-//calculating entanglement entropy....
+//calculating entanglement entropy....to do
 
 
           return norm;}
