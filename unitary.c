@@ -234,39 +234,31 @@ double  newPsi(PSI_STATE * psi_state)
 
          int i,j,u,J,l,ii;
          double expE=0;
-	 complx * psi1;
+         complx * psi1;
          newarr_(psi1,N);
- 
-	ull * regions = (calc_regions(pm))[0];
-	int size = size_(regions);
-	for (i=0;i<N;i++){
-	u=0;
-        while (u<size)
-	if (i ==regions[u]){
-	for (j=0;j<N;j++){
-	double * evector = psiEs+N*j;
-	psi1[i] += a[j]*z[j]*evector[i];}  break;}  //j loop closed; if loop closed 
-	else{
-	if (u==size){
-	psi1[i]=0;
-	break;}
-	else
-	u++;}} //else loop closed, i loop closed
+
+        ull * regions = (calc_regions(pm))[0];
+        int size = size_(regions);
+        for (i=0;i<N;i++){
+        for (j=0;j<size;j++){
+        double * evector = psiEs+N*regions[j];
+        psi1[i] += a[j]*z[j]*evector[i];  
+        }}
+        
 
 
 
 //calculating psi1 using W  
-/*  
-        double expE=0; 
-        int u,J,l,ii;
-        complx * psi1;
-        newarr_(psi1,N);
+ 
+        double expE_W=0;
+        complx * psi2;
+        newarr_(psi2,N);
         complx ** W = makeEN(pm, psiEs);
   	for(u=0;u<N;u++){
         for(J=0;J<N;J++){
-       psi1[u] += a[J]*z[J]*W[J][u];}}        
+       psi2[u] += a[J]*z[J]*W[J][u];}}        
           
-*/
+
 //calculating <E>  
           _Complex double * c;
           newarr_(c,N);
@@ -275,9 +267,20 @@ double  newPsi(PSI_STATE * psi_state)
           expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
           printf("Energy of small box:\n");
           printf("%lf\n",expE);
+          
+         
+          _Complex double * c_W=0;
+          newarr_(c,N);
+          c_W = coeff(psi2, size_(psi2), psiEs);
+          for(ii=0;ii<N;ii++){
+          expE_W += energy[ii]*SQR(creal(c_W[ii]))+SQR(cimag(c_W[ii]));}
+          printf("Energy of small box_W:\n");
+          printf("%lf\n",expE_W);
+
+
           freearr_(derivs);
 
-//calculating entanglement entropy....to do
+
 
 
           return norm;}
@@ -308,61 +311,28 @@ complx ** makeEN(PARAMS * pm, double * evectors)
    int N = pm->numstates;
    complx ** W;
    new2darr_(W,N,N);
-   int x_begin= (N - pm->num_bath_sites)/2;
+   int x_begin= (pm->num_sites - pm->num_bath_sites)/2;
    for(i=0;i<N;i++)
    {
    double * evector = evectors+N*i;
    for(j=0;j<N;j++)
    {
       unsigned long s = binary_basis[j];
-      if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
-   //   if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+    if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
+    //  if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
        {
-      W[i][j] = evector[j];
-   //   W[i][j] = 0;
+    W[i][j] = evector[j];
+    // W[i][j] = 0;
         }
       else
        {
-     W[i][j] = 0;   
-     // W[i][j] = evector[j];
+    // W[i][j] = 0;   
+     W[i][j] = evector[j];
        } 
    }
    }
    return W;
 }
-
-/*
-complx ** makeEN(PARAMS * pm, double * evectors)
-{
-  // unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites, pm->num_particles
-   ull * regions = (calc_regions(pm))[0];
-   int i,j,u;
-   int N = pm->numstates;
-   complx ** W;
-   new2darr_(W,N,N);
-   int x_begin= (N - pm->num_bath_sites)/2;
-   for(i=0;i<N;i++)
-   {
-   double * evector = evectors+N*i;
-   for(j=0;j<N;j++)
-   {
-      //for(u=u;u<size_(regions);u++){ 
-       if (regions[]==j)
-        {
-      W[i][j] = evector[j];
-   //   W[i][j] = 0;
-        }
-      else
-       {
-     W[i][j] = 0;   
-     // W[i][j] = evector[j];
-       } 
-   }
-   }
-   return W;
-}
-
-*/
 double ** makeJ(PSI_STATE * psi_state)
 {
    int i,j,k;
