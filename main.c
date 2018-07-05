@@ -764,7 +764,7 @@ int main(int argc, char * argv[])
                fclose(file_Smin);
          }
       }
-      for (ggg=0; ggg < 5; ggg++){
+      for (ggg=0; ggg < 1; ggg++){
          ull ** reg = calc_regions_x(pm);
          if (maximize_reg_prob) regional_prob_max(pm, cg, c, evectors, energy, reg);
          freearr_(reg);}
@@ -775,16 +775,30 @@ int main(int argc, char * argv[])
          _Complex double * psi_energy_basis=0;
          t = delta_t*k;
          psi = psit(c,evectors,energy,t);
-         
-         //if (t==0){
-         //ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
-         //double * density_matrix_0 = den(pm, psi,binary_basis_0);
-         //printf("density_S[t=0]:\n");
-         //for (int index=0;index < pm->L;index++){
-         //printf("%lf\n",density_matrix_0[index]);}}
+         /*
+         if (t==0){
+         ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
+         double * density_matrix_0 = den(pm, psi,binary_basis_0);
+         printf("density_S[t=0]:\n");
+         for (int index=0;index < pm->L;index++){
+         printf("%lf\n",density_matrix_0[index]);}}
+         */
+
+   
+          _Complex double * ct = 0;
+          int ii;
+          double expE_t=0;
+          ct = coeff(psi, size_(psi), evectors);
+          for(ii=0;ii<numstates;ii++){
+          expE_t += energy[ii]*SQR(creal(ct[ii]))+SQR(cimag(ct[ii]));}
+          //printf("Energy of initial whole box:\n");
+          printf("%lf\n",expE_t);
 
 
-    
+
+
+
+ 
          if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
          else S_o = ObsEntropyEX(pm, cg, evectors, energy, psi);
          double S_ent = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);

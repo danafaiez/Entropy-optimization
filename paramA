@@ -1,15 +1,15 @@
--L 12 -Linit 12
--t 1.90 -tp 1.90 -U 0.50 -Up 0.48
+-L 30 -Linit 30
+-t 0.50 -tp 0.50 -U 0.50 -Up 0.50
 #-evect_in_name #real_coeff_t1.0_tprime0.96_V0.00_Vp0.00_N30_Ne3.bin
 #-ener_in_name #ener_t1.0_tprime0.96_V0.00_Vp0.00_L30_Ne3.bin
--evect_in_name real_coeff_t1.9_tprime1.90_V0.50_Vp0.48_N12_Ne2.bin
--ener_in_name ener_t1.9_tprime1.90_V0.50_Vp0.48_L12_Ne2.bin
+-evect_in_name real_coeff_t0.5_tprime0.50_V0.50_Vp0.50_N30_Ne2.bin
+-ener_in_name ener_t0.5_tprime0.50_V0.50_Vp0.50_L30_Ne2.bin
 #-evect_in_name #real_coeff_t1.0_tprime0.00_V1.00_Vp0.00_N16_Ne4.bin
 #-ener_in_name #ener_t1.0_tprime0.00_V1.00_Vp0.00_L16_Ne4.bin
 -num_particles 2
--num_bath_sites 4
--beta 0
--calc_eigen_vectors
+-num_bath_sites 5
+-beta 0.1
+#-calc_eigen_vectors
 #-evolve_system
 #-minimize
 -minimize_unitary
@@ -23,7 +23,7 @@
 #-calc_foe
 #-calc_obs_xe
 -cutoff 0.005
--time 100 -delta_t 5
+-time 40 -delta_t 1
 -size_of_box 4
 -t_shift 0.0
 -numCoarseEs -1
