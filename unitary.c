@@ -217,19 +217,20 @@ double  newPsi(PSI_STATE * psi_state)
           psiN[y] += a[iE]*z[iE]*evector[y];
          }
        }
+
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          printf ("S_EX(unitary maxP) = %5f\n",S_o); 
 
 //calculating number density
-      
+/*      
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix = den(pm, psiN, binary_basis); 
          printf("density_S:\n");
          int index;
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
-     
+*/     
 //calculating psi1 using psiEs and region
 
          int i,j,u,J,l,ii;
@@ -244,10 +245,7 @@ double  newPsi(PSI_STATE * psi_state)
         double * evector = psiEs+N*regions[j];
         psi1[i] += a[j]*z[j]*evector[i];  
         }}
-        
-
-
-
+/*
 //calculating psi1 using W  
  
         double expE_W=0;
@@ -257,27 +255,28 @@ double  newPsi(PSI_STATE * psi_state)
   	for(u=0;u<N;u++){
         for(J=0;J<N;J++){
        psi2[u] += a[J]*z[J]*W[J][u];}}        
-          
+*/          
 
-//calculating <E>  
+//calculating <E> from psi1 
           _Complex double * c;
           newarr_(c,N);
           c = coeff(psi1, size_(psi1), psiEs);
           for(ii=0;ii<N;ii++){
-          expE += energy[ii]*SQR(creal(c[ii]))+SQR(cimag(c[ii]));}
+          expE += energy[ii]*SQR(cabs(c[ii]));}
           printf("Energy of small box:\n");
           printf("%lf\n",expE);
           
-         
+
+/*         
           _Complex double * c_W=0;
           newarr_(c,N);
           c_W = coeff(psi2, size_(psi2), psiEs);
           for(ii=0;ii<N;ii++){
-          expE_W += energy[ii]*SQR(creal(c_W[ii]))+SQR(cimag(c_W[ii]));}
+          expE_W += energy[ii]*(SQR(creal(c_W[ii]))+SQR(cimag(c_W[ii])));}
           printf("Energy of small box_W:\n");
           printf("%lf\n",expE_W);
 
-
+*/
           freearr_(derivs);
 
 
@@ -318,16 +317,16 @@ complx ** makeEN(PARAMS * pm, double * evectors)
    for(j=0;j<N;j++)
    {
       unsigned long s = binary_basis[j];
-    if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
-    //  if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+    //if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
+     if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
        {
     W[i][j] = evector[j];
     // W[i][j] = 0;
         }
       else
        {
-    // W[i][j] = 0;   
-     W[i][j] = evector[j];
+       W[i][j] = 0;   
+     //W[i][j] = evector[j];
        } 
    }
    }
