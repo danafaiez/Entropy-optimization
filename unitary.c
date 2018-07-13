@@ -230,7 +230,9 @@ double  newPsi(PSI_STATE * psi_state)
          int index;
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
-*/     
+
+ 
+*/
 //calculating psi1 using psiEs and region
 
          int i,j,u,J,l,ii;
@@ -241,21 +243,27 @@ double  newPsi(PSI_STATE * psi_state)
         ull * regions = (calc_regions(pm))[0];
         int size = size_(regions);
         for (i=0;i<N;i++){
-        for (j=0;j<size;j++){
-        double * evector = psiEs+N*regions[j];
-        psi1[i] += a[j]*z[j]*evector[i];  
-        }}
-/*
+        u=0;
+         while (u<size)
+          if (i==regions[u]){
+           for (j=0;j<N;j++){
+            double * evector = psiEs+N*j;
+            psi1[i] += a[j]*z[j]*evector[i];}//closing j loop
+           break;}//closing if 
+          else{
+           u++;
+           psi1[i]=0;}}//closing while and i loop
+
 //calculating psi1 using W  
- 
+        int uu;
         double expE_W=0;
         complx * psi2;
         newarr_(psi2,N);
         complx ** W = makeEN(pm, psiEs);
-  	for(u=0;u<N;u++){
+  	for(uu=0;uu<N;uu++){
         for(J=0;J<N;J++){
-       psi2[u] += a[J]*z[J]*W[J][u];}}        
-*/          
+       psi2[uu] += a[J]*z[J]*W[J][uu];}}        
+          
 
 //calculating <E> from psi1 
           _Complex double * c;
@@ -266,8 +274,7 @@ double  newPsi(PSI_STATE * psi_state)
           printf("Energy of small box:\n");
           printf("%lf\n",expE);
           
-
-/*         
+         
           _Complex double * c_W=0;
           newarr_(c,N);
           c_W = coeff(psi2, size_(psi2), psiEs);
@@ -276,7 +283,7 @@ double  newPsi(PSI_STATE * psi_state)
           printf("Energy of small box_W:\n");
           printf("%lf\n",expE_W);
 
-*/
+
           freearr_(derivs);
 
 
@@ -317,15 +324,15 @@ complx ** makeEN(PARAMS * pm, double * evectors)
    for(j=0;j<N;j++)
    {
       unsigned long s = binary_basis[j];
-    //if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
-     if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+    if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
+     //if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
        {
     W[i][j] = evector[j];
     // W[i][j] = 0;
         }
       else
        {
-       W[i][j] = 0;   
+      W[i][j] = 0;   
      //W[i][j] = evector[j];
        } 
    }
@@ -703,8 +710,7 @@ double * cabs_array(complx * carray)
    return arr;
 }
 
-double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double *
-energy)
+double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * energy)
 {
    complx ** E =  makeEs(pm, psiEs);
    complx ** newE;
