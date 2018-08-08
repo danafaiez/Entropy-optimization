@@ -21,7 +21,7 @@ maxp_Ulow_6=[1,0.959865,0.823407,0.760563,0.714737,0.683772,0.664105,0.634076,0.
 
 ##maxP for generic system, t=1.9,tp=1.90,U=0.5,Up=0.48,complex_guass coef,B=0.01,localized in middle 5 sites
 L5=np.array([5,10,12,15,18,20,22,25,28,30])
-maxp_Ulow_m5=[1.000,0.745414,0.720627,0.616848, 0.611636,0.613332,0.602319 ,0.545235,0.589383 ,0.589317]
+maxp_Ulow_m5=[1,0.745414,0.720627,0.616848, 0.611636,0.613332,0.602319 ,0.545235,0.589383 ,0.589317]
 maxp_Ulow_e5=[1,0.717694,0.694804,0.642354,0.602576,0.601286,0.571663,0.568835,0.560111,0.545582]
 ##S_ex corresponding to the state with Pmax at t=1.9,tp=1.90,U=0.5,Up=0.48,complex_guass coef,B=0.01,localized in middle 5 sites 
 L5S=np.array([5,10,15,20,25,30])
@@ -67,9 +67,15 @@ plt.xticks(np.arange(0, max(NM2_L5), 5))
 #plt.scatter(NM2,maxp_U0_real,s=15,color='m',marker=">",label='U=Up=0\nreal_gauss coef')
 #plt.scatter(NM2,maxp_Ulow_5,s=15,color='gray',marker=">",label='t=1.0,tp=0.96\nU=0.5,Up=0.48\ncomplex_gauss coef')
 #plt.scatter(NM2,maxp_Ulow_6,s=15,color='m',marker=">",label='t=1.0,tp=0.96\nU=0.5,Up=0.48\ncomplex_gauss coef')
-plt.scatter(NM2_L5,maxp_Ulow_m5,s=15,color='g',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nMiddle;M=10')
-plt.scatter(NM2_L5,maxp_Ulow_m6,s=15,color='b',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nMiddle;M=20')
-plt.scatter(NM2_L5,maxp_Ulow_e5,s=15,color='r',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nSide;M=10')
+#plt.scatter(NM2_L5,maxp_Ulow_m5,s=15,color='g',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nMiddle;M=10')
+plt.scatter(NM2_L5,maxp_Ulow_m5,s=15,color='g',marker=">",label='middle 5 sites')
+
+
+#plt.scatter(NM2_L5,maxp_Ulow_m6,s=15,color='b',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nMiddle;M=20')
+plt.scatter(NM2_L5,maxp_Ulow_m6,s=15,color='b',marker=">",label='middle 6 sites')
+
+#plt.scatter(NM2_L5,maxp_Ulow_e5,s=15,color='r',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nSide;M=10')
+plt.scatter(NM2_L5,maxp_Ulow_e5,s=15,color='r',marker=">",label='first 5 sites')
 #plt.scatter(L5S,R,s=15,color='r',marker="m",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nM10;size_box=5')
 ax.set_axisbelow(True)
 ax.minorticks_on()
@@ -87,7 +93,7 @@ ax.tick_params(which='both', # Options for both major and minor ticks
 
 
 plt.legend(loc='top right')
-ax.text(34,0.67,'Beta=0.01\n#particles=3')
+ax.text(34,0.92,'Beta=0.01\n#particles=3')
 #ax.text(7,0.85,'Beta=0.1\nM=20\n#particles=3')
 plt.ylabel('maxP')
 plt.xlabel('$\\frac{N}{M^{2}}$')

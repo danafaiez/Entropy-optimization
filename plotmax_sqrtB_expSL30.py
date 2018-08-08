@@ -19,7 +19,7 @@ expDeltaS=list(expDeltaS)
 #S=[  , ,  ,  ,  ,  ]
 
 ##FOE with x-coarse of size 5
-##foe=[  ,  , , , ,  ]
+##foe=[ ,  , , , ,  ]
 
 ##generic, t=U=1.0,tp=Up=0.96 localizing in the first 10 sites (M=120)  
 maxp_10=[0.723383,0.700778,0.633898,0.520311,0.388789,0.270550,0.179787,0.117113,0.076026,0.049653,0.032737]
@@ -27,15 +27,18 @@ maxp_10=[0.723383,0.700778,0.633898,0.520311,0.388789,0.270550,0.179787,0.117113
 ##generic, t=1.0,tp=0.96 U=0.5,Up=0.48 localizing in the first 6 sites  
 maxp_Ulow_6=[0.598496,0.547969,0.412533,0.245610,0.117935,0.049086,0.019120,0.007365,0.002900,0.001188,0.00051]
 
-##generic, t=U=1.0,tp=Up=0.96 localizing in the first 5 sites, real-gaussian coef
+#generic, t=U=1.0,tp=Up=0.96 localizing in the first 5 sites, real-gaussian coef
 maxp_realG_coef=[0.442079,0.355797,0.221225,0.104470,0.039826,0.013409,0.004263,0.001339,0.000428 ,0.000142,0.000050]
 
+
+#generic, t=U=1.0,tp=Up=1 localizing in the mid 5 sites, comp-gaussian 
+maxp_gen_eqtU_md=[0.594752,0.594752,0.585474,0.525236,0.357344,0.181080,0.075035,0.028558,0.010888,0.004382,0.001912,0.000915,0.000481] 
 
 ##generic,t=1.0,tp=0.96 U=0.5,Up=0.48 localizing in the first 5 sites  
 maxp_Ulow_5=[0.553522,0.482010,0.329270,0.168357,0.067853,0.023646,0.007726,0.002497,0.000823,0.000282,0.000102]
 
 ##generic,t=1.0,tp=0.96 U=Up=0, localizing in the first 5 sites  
-maxp_U0=[0.538325,0.491957,0.351423,0.193360,0.087653,0.033710,0.012117,0.004283]
+#maxp_U0=[0.538325,0.491957,0.351423,0.193360,0.087653,0.033710,0.012117,0.004283]
 
 ##generic, t=1.3,tp=0.96,U=0.50,Up=0.48 localizing in the first 5 sites
 maxp_lU_ht=[0.547476,0.459427,0.268296,0.108295,0.034217,0.009773,0.002769,0.000816,0.000256,0.000086,0.000031]
@@ -57,6 +60,13 @@ maxp_lU_http_e5=[0.555551,0.442409,0.223202,0.072557,0.018237,0.004219,0.000992,
 ##Integrable, t=1,tp=0.00,U=0.5,Up=0 localizing in the first 6 sites
 maxp_int_lowU_6=[0.590269,0.568529,0.528301,0.468844,0.406139,0.336265,0.271645,0.215479,0.168844,0.131307,0.101694]
 
+
+##Integrable, t=1,tp=0,U=1.9,Up=0 localizing in the middle 5 sites
+maxp_int_hU_m5=[0.516941,0.471211,0.401534,0.324394,0.247699,0.182022,0.130892,0.093263,0.066537,0.047837,0.034809]
+
+##Integrable, t=1,tp=0,U=1,Up=0 localizing in the middle 5 sites
+maxp_int_eqtU_m5=[0.540361,0.513938,0.458021,0.382183,0.303047,0.231845,0.173667,0.128694,0.095179,0.070711,0.052987]
+
 ##Integrable, t=1,tp=0.00,U=0.5,Up=0 localizing in the first 5 sites
 maxp_int_lowU_5=[0.540194,0.512869,0.455390,0.378262,0.296576,0.222333,0.161367,0.114582,0.080311,0.055930 ,0.038879]
 
@@ -67,7 +77,7 @@ maxp_int_lU_hK_5=[0.541545,0.499928,0.420566,0.313175,0.216564,0.142778,0.091613
 maxp_int_lU_hhK_e5=[0.553906,0.478838,0.332228,0.196595,0.106571,0.055921,0.029228,0.015440,0.008300,0.004556,0.002558]
 
 ##Integrable, t=1.9,tp=0.00,U=0.5,Up=0 localizing in the middle 5 sites
-maxp_int_lU_hhK_m5=[0.572635,0.506867,0.374892,0.245721,0.152472,0.094121,0.059328,0.038559,0.025878,0.017899,0.012717]
+maxp_int_lU_hhK_m5=[0.572635,0.571850,0.565697,0.506867,0.374892,0.245721,0.152472,0.094121,0.059328,0.038559,0.025878,0.017899,0.012717]
 
 ##Pmax for t=1,U=0.50,Up=0.48 system at B=0, localizing in the first 5 sites, vs tp
 tp=[0,0.2,0.48,1,1.3,1.5]
@@ -93,19 +103,30 @@ fig, ax = plt.subplots()
 #plt.scatter(sqrt_Beta,maxp,s=30,color='m', marker="o",label='L=30\nsize of box=5\n#particles=3\nGeneric system:\nt=1.0,tp=0.96\nU=1.0,Up=0.96\ncomplex gaussian coef')
 #plt.scatter(expDeltaS,maxp,s=30,color='g', marker="o",label='L=30\nsize of box=5\n#particles=3')
 ##plotting the U=Up=0 case - localized in 5 sites
-#plt.scatter(expDeltaS_U0,maxp_U0,s=30,color='b', marker="o",label='U=Up=0\nL=30\nsize of box=5\n#particles=3')
+#plt.scatter(expDeltaS_U0,maxp_U0,s=30,color='r', marker="o",label='U=Up=0\nL=30\nsize of box=5\n#particles=3')
 ##plotting the generic case - localized in 10 sites
 #plt.scatter(expDeltaS,maxp_10,s=30,color='gray', marker="o",label='L=30\nsize of box=10\n#particles=3')
 ##plotting the generic case - localized in 5 sites - real gaussian coef
-#plt.scatter(sqrt_Beta,maxp_realG_coef,s=30,color='g', marker="o",label='L=30\nsize of box=5\n#particles=3\nreal gaussian coef')
+#plt.scatter(sqrt_Beta,maxp_realG_coef,s=30,color='g', marker="o",label='L=30\nsize of box=5\nt=U=1.0,tp=Up=0.96\n#particles=3\nreal gaussian coef')
+
+##plotting the integrable case - t=1,U=1.9,tp=Up=0 - localized in middle 5 sites - complex gaussian coef 
+#plt.scatter(sqrt_Beta,maxp_int_hU_m5,s=25,color='orange',marker="o",label='L=30\nsize of box=5\n#particles=3\nInt system:\nt=1,U=1.9,\ncomplex gaussian coef')
+
+##plotting the generic case -t=tp=U=Up=1 - localized in middle 5 sites - complex gaussian coef
+#plt.scatter(sqrt_Beta2,maxp_gen_eqtU_md,s=25,color='orange',marker="o",label='L=30\nsize of box=5\n#particles=3\ngen system:\nt=tp=Up=U=1,\ncomplex gaussian coef')
+
+##plotting the integrable case - t=U=1,tp=Up=0 - localized in middle 5 sites - complex gaussian coef
+#plt.scatter(sqrt_Beta,maxp_int_eqtU_m5,s=25,color='black',marker="o",label='L=30\nsize of box=5\n#particles=3\nInt system:\nt=U=1,\ncomplex gaussian coef')
 ##plotting the generic case - U=0.5,Up=0.48 - localized in 5 sites - complex gaussian coef
-#plt.scatter(sqrt_Beta,maxp_Ulow_5,s=25,color='m',marker="o",label='L=30\nsize of box=5\n#particles=3\nGeneric system:\nt=1.0,tp=0.96\nU=0.5,Up=0.48\ncomplex gaussian coef')
+#plt.scatter(sqrt_Beta,maxp_Ulow_5,s=25,color='r',marker="o",label='L=30\nsize of box=5\n#particles=3\nGeneric system:\nt=1.0,tp=0.96\nU=0.5,Up=0.48\ncomplex gaussian coef')
 ##plotting the integrable case - t=1.0,tp=0.00,U=0.5,Up=0.00 - localized in 5 sites - complex gaussian coef
 #plt.scatter(sqrt_Beta,maxp_int_lowU_5,s=30,color='r',marker="o",label='L=30\nsize of box=5\n#particles=3\nIntegrable system:\nt=1.0,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
 ##plotting the generic case - U=0.5,Up=0.48 - localized in 6 sites - complex gaussian coef
-#plt.scatter(sqrt_Beta,maxp_Ulow_6,s=25,color='b',marker="o",label='L=30\nsize of box=6\n#particles=3\nGeneric system:\nt=1.0,tp=0.96\nU=0.5,Up=0.48\ncomplex gaussian coef')
+#plt.scatter(sqrt_Beta,maxp_Ulow_6,s=25,color='gray',marker="o",label='L=30\nsize of box=6\n#particles=3\nGeneric system:\nt=1.0,tp=0.96\nU=0.5,Up=0.48\ncomplex gaussian coef')
 ##plotting the integrable case - t=1.0,tp=0.00,U=0.5,Up=0.00 - localized in 6 sites - complex gaussian coef
 #plt.scatter(sqrt_Beta,maxp_int_lowU_6,s=30,color='r',marker="o",label='L=30\nsize of box=6\n#particles=3\nIntegrable system:\nt=1.0,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
+##plotting the integrable case - t=1.3,tp=0.00,U=0.5,Up=0.00 - localized in first 5 sites - complex gaussian coef
+#plt.scatter(sqrt_Beta,maxp_int_lU_hK_5,s=25,color='b',marker="o",label='L=30\nlocalizing in first 5 sites\n#particles=3\nt=1.3,tp=0\nU=0.5,Up=0\ncomplex gaussian coef')
 ##plotting Pmax vs sqrtB, localization on first 5 sites, t=1.3,tp=1.30,U=0.50,Up=0.48
 #plt.scatter(sqrt_Beta,maxp_lU_http_m5,s=25,color='m',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.3,tp=1.30\nU=0.5,Up=0.48\ncomplex gaussian coef')
 #plt.scatter(sqrt_Beta,maxp_lU_http_m5,s=25,color='m',marker="<",label='loc:middle 5 sites\nt=1.3,tp=1.30\nU=0.5,Up=0.48')
@@ -115,18 +136,20 @@ fig, ax = plt.subplots()
 #plt.scatter(sqrt_Beta,maxp_lU_http_e5,s=25,color='b',marker="<",label='loc:first 5 sites\nt=1.3,tp=1.30\nU=0.5,Up=0.48')
 
 ##plotting Pmax vs sqrtB, generic, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites
-plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\ncomplex gaussian coef')
-#plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='loc.:middle 5 sites\nt=1.9,tp=1.90\nU=0.5,Up=0.48')
+#plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\ncomplex gaussian coef')#
+plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5,s=25,color='r',marker="<",label='complex gaussian coef')
 
 ##plotting Pmax vs sqrtB, generic, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites, real coef
-plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5_real,s=25,color='g',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\nreal gaussian coef')
+#plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5_real,s=25,color='g',marker="<",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=1.90\nU=0.5,Up=0.48\nreal gaussian coef')
+plt.scatter(sqrt_Beta2,maxp_lU_hhttp_m5_real,s=25,color='g',marker="<",label='real gaussian coef')
+
 
 ##plotting Pmax vs sqrtB,integrable, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the first 5 sites
-#plt.scatter(sqrt_Beta,maxp_int_lU_hhK_e5,s=25,color='g',marker="o",label='L=30\nlocalizing in first 5 sites\n#particles=3\nt=1.9,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
+#plt.scatter(sqrt_Beta,maxp_int_lU_hhK_e5,s=25,color='m',marker="o",label='L=30\nlocalizing in first 5 sites\n#particles=3\nt=1.9,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
 #plt.scatter(sqrt_Beta,maxp_int_lU_hhK_e5,s=25,color='g',marker="o",label='loc.:first 5 sites\nt=1.9,tp=0.00\nU=0.5,Up=0.00')
 
 ##plotting Pmax vs sqrtB,integrable, t=1.9,tp=1.90,U=0.50,Up=0.48 localizing in the middle 5 sites
-#plt.scatter(sqrt_Beta,maxp_int_lU_hhK_m5,s=25,color='gray',marker="o",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
+#plt.scatter(sqrt_Beta2,maxp_int_lU_hhK_m5,s=25,color='gray',marker="o",label='L=30\nlocalizing in middle 5 sites\n#particles=3\nt=1.9,tp=0.00\nU=0.5,Up=0.00\ncomplex gaussian coef')
 #plt.scatter(sqrt_Beta,maxp_int_lU_hhK_m5,s=25,color='gray',marker="o",label='loc.:middle 5 sites\nt=1.9,tp=0.00\nU=0.5,Up=0.00')
 
 #plt.xticks(np.arange(0, 2, 0.1))
@@ -150,6 +173,7 @@ ax.tick_params(which='both', # Options for both major and minor ticks
 
 #plt.xlabel('expDeltaS')
 plt.xlabel('$\\sqrt{\\beta}$')
+ax.text(1,0.5,'L=30\n#particles=3\nlocalizing in middle 5 site')
 #plt.ylabel('$\\frac{maxP(Beta)}{maxP(Beta=0)}$')
 plt.ylabel('Pmax')
 plt.show()

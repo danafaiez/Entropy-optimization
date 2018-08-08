@@ -263,6 +263,7 @@ _Complex double * psi_thermal(int  numstates, double beta, double * energy, doub
    }
    return psi;
 }
+//#if 0
 #else
 _Complex double * psi_thermal(int  numstates, double beta, double * energy, double * evectors, double * e)
 {
@@ -298,7 +299,6 @@ _Complex double * psi_thermal(int  numstates, double beta, double * energy, doub
 }
 #endif
 
-
 _Complex double * coeff(_Complex double * psi, int n, double * h)
 {
    int i;
@@ -310,7 +310,6 @@ _Complex double * coeff(_Complex double * psi, int n, double * h)
    }
    return c;
 }
-
 _Complex double * convert_double2complex(double * in, int N)
 {
    _Complex double * out;
@@ -322,7 +321,6 @@ _Complex double * convert_double2complex(double * in, int N)
    }
    return out;
 }
-
 _Complex double * psit(_Complex double * coef, double * h, double * evalues, double t)
 {
    int i;
@@ -782,8 +780,9 @@ ull ** calc_regions(PARAMS * pm)//for the moment, the special case of just two s
    for(i=0; i < pm->numstates; i++)
    {
       unsigned long s = binary_basis[i];
-      if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
-     // if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+       if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
+      //if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
+     // if (num_ones_in_range(pm->num_sites-pm->num_bath_sites ,pm->num_sites, s) == pm->num_particles)
        {
          appendarr_(regions[IN],i);
       }

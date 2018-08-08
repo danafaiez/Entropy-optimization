@@ -757,7 +757,7 @@ int main(int argc, char * argv[])
          }
          else
          {
-            for (g=0; g <1  ; g++){
+            for (g=0; g <100  ; g++){
                double sfval = 0;
                sfval = Entropy_min(pm, cg, c, evectors, energy, eg);
                fprintf(file_Smin,"%lf\n", sfval);}
@@ -782,18 +782,18 @@ int main(int argc, char * argv[])
          printf("density_S[t=0]:\n");
          for (int index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix_0[index]);}}
-         
-
-          _Complex double * ct = 0;
+        */
+          if (t==0){
+         _Complex double * ct = 0;
           int ii;
           double expE_t=0;
           ct = coeff(psi, size_(psi), evectors);
           for(ii=0;ii<numstates;ii++){
           expE_t += energy[ii]*SQR(cabs(ct[ii]));}
-          printf("Energy of initial whole box:\n");
-          printf("%lf\n",expE_t);
-          */
+          printf("Energy of the whole box (t=0):\n");
+          printf("%lf\n",expE_t);}
           
+//*/          
 
  
          if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
