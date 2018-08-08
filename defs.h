@@ -55,6 +55,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <time.h>
+
+
 #ifndef __USE_GNU
 #define __USE_GNU
 #endif
@@ -154,7 +157,6 @@ void reverse_int_array(int * a, int length);
    (a)=b;  			\
    (b)=tmp;  			\
 } while(0) 
-
 
 #define ran() (random()/(RAND_MAX+1.0))
 

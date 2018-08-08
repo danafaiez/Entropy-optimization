@@ -154,20 +154,19 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          
          if (status == GSL_SUCCESS)
            {
-//            printf ("S converged to minimum at\n");
+            printf ("S converged to minimum at\n");
            }   
          //printf ("%5d %10.3e f() = %7.3f size = %.3f\n",iter, gsl_vector_get (s->x, 0), s->fval, size);
        }
 
-    while (status == GSL_CONTINUE && iter < 270000);
-
-  //  printf ("%5d S = %7.3f \n",iter,s->fval);  
-    printf ("%7.3f\n",s->fval);
+    while (status == GSL_CONTINUE && iter < 20000000);
+      printf ("Smin = %7.6f\n",s->fval);
+ //   printf ("%7.3f\n",s->fval);
 
 
 //Calculating the coarse_density//
 //calculate psi using the phase from the last iteration in the minimization loop (s->x)//
-/*  _Complex double * psi = psi_phi(s->x, coef, psiEs,evalues); 
+/*  _Complex double * psi = psi_phi(s->x, coef, psiEs); 
     double ** Ps = calc_PsEX(pm, cg, evalues, psiEs, psi);
     double ** density = coarse_density(pm, cg, Ps);
     double sum=0;
@@ -190,13 +189,12 @@ printing the sum of the probabilities*
    printf("\n");
 
 
-
+*/
 //calculating number density operator using psi(s->x) from the last iteration in the minimization loop//
 
 //condition for calculating <N>//
 //if ((s->fval)<2.224){
 
-printf ("%7.3f\n",s->fval);
  _Complex double * psi = psi_phi(s->x, coef, psiEs);
  ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
  double * density_matrix = den(pm, psi, binary_basis);
@@ -207,10 +205,10 @@ printf ("%7.3f\n",s->fval);
         printf("%lf\n",density_matrix[index]);
     }
 //}
-
+/*
 //calculating S_ent using s->x // 
 _Complex double * vec = psi_phi(s->x, coef, psiEs);
-double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);
+//double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);
 
 //calculating S_ex using s->x // 
 double S_ex_corres = ObsEntropyEX(pm, cg, psiEs, evalues, vec);
@@ -219,10 +217,46 @@ double S_ex_corres = ObsEntropyEX(pm, cg, psiEs, evalues, vec);
 _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, vec);
  double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);
 
- printf("S_ent_corres = %lf\n",S_ent_corres);
- printf("S_ex_corres = %lf\n",S_ex_corres);
- printf("S_f_corres = %lf\n",S_f_corres);
+printf("S_ent_corres = %lf\n",S_ent_corres);
+printf("S_ex_corres = %lf\n",S_ex_corres);
+printf("S_f_corres = %lf\n",S_f_corres);
 */
+
+//calculating expectation value of energy for the state with minS
+//calculating psi1 using psiEs and region
+//if((s->fval)<2.75){
+         int i,u;
+         double p,expE=0;
+         complx * psi1;
+         newarr_(psi1,n);
+        ull * regions = (calc_regions(pm))[0];
+        int sz = size_(regions);
+        for (i=0;i<n;i++){
+        u=0;
+          while (u<sz)
+          if (i==regions[u]){
+          for (j=0;j<n;j++){
+          p = gsl_vector_get(s->x, j);
+          _Complex double exp_ip = cexp((-1.0*I)*p);
+          double * evector = psiEs+n*j;
+          psi1[i] += coef[j]*evector[i]*exp_ip;}
+          break;}
+          else{
+           u++;
+           psi1[i]=0;}}
+
+          int ii;
+          _Complex double * c;
+          double exp_E=0;
+          newarr_(c,n);
+          c = coeff(psi1, size_(psi1), psiEs);
+          for(ii=0;ii<n;ii++){
+          exp_E += evalues[ii]*SQR(cabs(c[ii]));}
+          printf("Energy of small box:\n");
+          printf("%lf\n",exp_E);
+//}
+
+
     gsl_vector_free(x);
     gsl_vector_free(ss);
     gsl_multimin_fminimizer_free (s);

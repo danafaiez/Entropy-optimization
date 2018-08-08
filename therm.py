@@ -31,7 +31,7 @@ def S(beta):
 def f(beta):
    return energy -E(beta)
 
-num_skip=4
+num_skip=2
 
 test_m = 0
 if test_m:
@@ -47,7 +47,7 @@ e_ave = mean(e2,axis=1)
 
 i=0
 for energy in e_ave:
-   b = scipy.optimize.bisect(f,-30,20)
+   b = scipy.optimize.bisect(f,-30,30)
    s_out[i,0] = energy
    s_out[i,1] = S(b)
    s_out[i,2] = b
