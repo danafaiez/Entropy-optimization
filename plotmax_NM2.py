@@ -77,14 +77,11 @@ plt.scatter(NM2_L5,maxp_Ulow_m6,s=15,color='b',marker=">",label='middle 6 sites'
 #plt.scatter(NM2_L5,maxp_Ulow_e5,s=15,color='r',marker=">",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nSide;M=10')
 plt.scatter(NM2_L5,maxp_Ulow_e5,s=15,color='r',marker=">",label='first 5 sites')
 #plt.scatter(L5S,R,s=15,color='r',marker="m",label='t=1.9,tp=1.9\nU=0.5,Up=0.48\ncomplex_gauss coef\nM10;size_box=5')
+
 ax.set_axisbelow(True)
 ax.minorticks_on()
-# Customize the major grid
 ax.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
-# Customize the minor grid
 ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
-
-# Turn off the display of all ticks.
 ax.tick_params(which='both', # Options for both major and minor ticks
                 top='off', # turn off top ticks
                 left='on', # turn off left ticks

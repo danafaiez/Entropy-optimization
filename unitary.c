@@ -6,6 +6,7 @@
 #include "energy_graining.h"
 #include "basis_states.h"
 #include "unitary.h"
+#include "ent_entropy.h"
 #include "ran.h"
 #include "min.h"
 #define THETA 0
@@ -148,7 +149,8 @@ double  newPsi(PSI_STATE * psi_state)
    double * psiEs = psi_state->psiEs;
    double * energy = psi_state->energy;
    CG * cg = psi_state->cg;
-  
+   EG * eg = psi_state->eg; 
+ 
    int i,j,count,countmax=40000;
    int N = psi_state->N;
    int M = psi_state->M;
@@ -184,11 +186,11 @@ double  newPsi(PSI_STATE * psi_state)
       if (count%200 == 0)
       {
          int minimum_found=0;
-         printf("P = %lf\n",norm);
+        // printf("P = %lf\n",norm);///uncommoment this later
          double * derivs = firstDeriv(z,psi_state->J);
          double deriv_error = L2(derivs,N);
          deriv_error = sqrt(deriv_error);
-         printf("deriv_error = %g\n",deriv_error);
+         //printf("deriv_error = %g\n",deriv_error);//uncommoment this later
          
          if (deriv_error < 1e-10)
          {
@@ -206,7 +208,8 @@ double  newPsi(PSI_STATE * psi_state)
          }
         
         if (minimum_found){
-       //observational entropy//       
+
+       //observational entropy_xE//       
          newarr_(psiN,N);
          int y;      
         for(y=0;y < N;y++)
@@ -217,11 +220,23 @@ double  newPsi(PSI_STATE * psi_state)
           psiN[y] += a[iE]*z[iE]*evector[y];
          }
        }
-
+/*
          //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
-         printf ("S_EX(unitary maxP) = %5f\n",S_o); 
+         //printf ("S_EX(unitary maxP) = %5f\n",S_o); 
+         //printf ("%5f\n",S_o);
+        
+         //observational entropy_FOE// 
+        _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, psiN);
+         double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);         
+         //printf("S_f_corres = %lf\n",S_f_corres);
+         //printf("%lf\n",S_f_corres);
 
+         double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
+         //printf("S_ent = %lf\n",S_ent_corres);
+         //printf ("%5f\n",S_ent_corres);
+ 
+ 
 //calculating number density
       
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
@@ -274,7 +289,8 @@ _Complex double * c_W=0;
           printf("Energy of small box_W:\n");
           printf("%lf\n",expE_W);
 
-//calculating <E> from psi1 
+//calculating <E> from psi1
+ 
           _Complex double * c;
           newarr_(c,N);
           c = coeff(psi1, size_(psi1), psiEs);
@@ -283,7 +299,7 @@ _Complex double * c_W=0;
           printf("Energy of small box:\n");
           printf("%lf\n",expE);
           
-
+*/
 
           freearr_(derivs);
 
@@ -650,20 +666,52 @@ min_so_far);
 }
 
 
+ull ** calc_regionsEs(PARAMS * pm)
+{
+   int i;
+   ull ** regions;
+   unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+   //ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+   int num_in=0, num_out=0;
+   int IN=0, OUT=1;
+   newarr_(regions,2);
+//   newarr_(regions[IN],1);
+//   newarr_(regions[OUT],1);
+
+   for(i=0; i < pm->numstates; i++)
+   {
+      unsigned long s = binary_basis[i];
+      if (num_ones_in_range(pm->x_init, pm->x_fin, s) == pm->num_particles) 
+      {
+         appendarr_(regions[IN],i);
+      }
+      else
+      {
+         appendarr_(regions[OUT],i);
+      }
+   }
+   return regions;
+}
+
+
+
 complx ** makeEs(PARAMS * pm, double * evectors)
 {
    int i,j,M,N;
    complx ** E;
    ull * binary_basis = enumerate_r_basis(pm->num_sites, pm->num_particles);
-   ull * regions = (calc_regions(pm))[0];
+   ull * regions = (calc_regionsEs(pm))[0];
    N = pm->numstates;
    M = size_(regions);
+   
+   /* uncmmment this later
    printf("****************************************************************\n");
    printf("****************************************************************\n");
    printf("****************************************************************\n");
    printf("****************************************************************\n");
    printf("****M= %d, ***N =%d\n",M,N);
    printf("****************************************************************\n");
+   */
    new2darr_(E,N,M);
    for(i=0; i < N;i++)
    {
@@ -713,7 +761,7 @@ double * cabs_array(complx * carray)
    return arr;
 }
 
-double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * energy)
+double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * energy, EG * eg)
 {
    complx ** E =  makeEs(pm, psiEs);
    complx ** newE;
@@ -728,7 +776,6 @@ double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * 
    psi_state.a = cabs_array(coef);
    double ** J = makeJ(&psi_state);
    psi_state.J = J;
-  
  
    int size_of_box = cg->size_of_box;
    psi_state.size_of_box = size_of_box;
@@ -736,10 +783,10 @@ double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * 
    psi_state.numstates = numstates;
    psi_state.pm = pm;
    psi_state.cg = cg;
+   psi_state.eg = eg;
    psi_state.psiEs = psiEs;
    psi_state.energy = energy;  
    double maxProb = newPsi(&psi_state);
-   
   // double minimum = make_ran_state(N,M, E,newE, psi_state.a, J);
    return maxProb;
 }

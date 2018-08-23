@@ -129,7 +129,7 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
      }
 //Set initial step sizes to 1 //
     ss = gsl_vector_alloc (n);
-    gsl_vector_set_all (ss, 1.0);
+    gsl_vector_set_all (ss, 0.2);
 
 //Initialize method, iterate, and function to minimize//
     minex_func.n = n;
@@ -154,14 +154,14 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          
          if (status == GSL_SUCCESS)
            {
-            printf ("S converged to minimum at\n");
+       //     printf ("S converged to minimum at\n");
            }   
-         //printf ("%5d %10.3e f() = %7.3f size = %.3f\n",iter, gsl_vector_get (s->x, 0), s->fval, size);
+         //printf ("%5d f() = %7.3f \n",iter, s->fval);
        }
 
     while (status == GSL_CONTINUE && iter < 20000000);
-      printf ("Smin = %7.6f\n",s->fval);
- //   printf ("%7.3f\n",s->fval);
+ //     printf ("Smin = %7.6f\n",s->fval);
+   printf ("%7.7f\n",s->fval);
 
 
 //Calculating the coarse_density//
@@ -189,7 +189,7 @@ printing the sum of the probabilities*
    printf("\n");
 
 
-*/
+
 //calculating number density operator using psi(s->x) from the last iteration in the minimization loop//
 
 //condition for calculating <N>//
@@ -205,13 +205,15 @@ printing the sum of the probabilities*
         printf("%lf\n",density_matrix[index]);
     }
 //}
-/*
+
 //calculating S_ent using s->x // 
 _Complex double * vec = psi_phi(s->x, coef, psiEs);
 //double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);
 
 //calculating S_ex using s->x // 
+_Complex double * vec = psi_phi(s->x, coef, psiEs);
 double S_ex_corres = ObsEntropyEX(pm, cg, psiEs, evalues, vec);
+printf("S_ex_corres = %lf\n",S_ex_corres);
 
 //calculating FOEusing s->x // 
 _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, vec);
@@ -220,7 +222,7 @@ _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, vec);
 printf("S_ent_corres = %lf\n",S_ent_corres);
 printf("S_ex_corres = %lf\n",S_ex_corres);
 printf("S_f_corres = %lf\n",S_f_corres);
-*/
+
 
 //calculating expectation value of energy for the state with minS
 //calculating psi1 using psiEs and region
@@ -256,7 +258,7 @@ printf("S_f_corres = %lf\n",S_f_corres);
           printf("%lf\n",exp_E);
 //}
 
-
+*/
     gsl_vector_free(x);
     gsl_vector_free(ss);
     gsl_multimin_fminimizer_free (s);

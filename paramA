@@ -7,24 +7,24 @@
 #-evect_in_name #real_coeff_t1.0_tprime0.00_V1.00_Vp0.00_N16_Ne4.bin
 #-ener_in_name #ener_t1.0_tprime0.00_V1.00_Vp0.00_L16_Ne4.bin
 -num_particles 2
--num_bath_sites 8
+-num_bath_sites 9
 -beta 0.01
--calc_eigen_vectors
-#-evolve_system
-#-minimize
+#-calc_eigen_vectors
+-evolve_system
+-minimize
 #-minimize_unitary
 -minimize_foe 0
 -minimize_S_EX 1
 -minimize_Sent 0
 #-maximize_reg_prob
 -x_init 0
--x_fin 4
+-x_fin 6
 -eigenvectornum 2
 #-calc_foe
 #-calc_obs_xe
 -cutoff 0.005
 -time 100 -delta_t 5
--size_of_box 8
+-size_of_box 4
 -t_shift 0.0
 -numCoarseEs -1
--seed 1000
+-seed 1

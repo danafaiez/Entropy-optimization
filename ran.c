@@ -21,7 +21,7 @@ double gaussian_random()
 
 complx c_gaussian_random()
 {
-srand(time(0));
+//srand(time(0));
    double x,y;
    double rsq;
    do 
