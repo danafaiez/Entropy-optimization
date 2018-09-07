@@ -35,7 +35,7 @@ Sxe[2] = 'Sxe_L24_Ne3_CG_loc1st6_B0.01.d'
 Sxe[3] = 'Sxe_L30_Ne3_CG_loc1st6_B0.01.d'#chnage this-this is only ran for a small number of times
 
 
-#Sent[1] = 'Sent_L12_Ne3_CG_loc1st6_B0.01.d'
+#Sent[1] = 'Sent_L12_Ne3_CG_loc1st6_B0.01.d'#I dont think this is done correctly since Sent find entropy btw the 1st #bath_sites and the rest where #bath_sites>6. and this wouldnt work in the case where particlesare localized in the 1st 6 sites.
 Sent[1] = 'Sent_L18_Ne3_CG_loc1st6_B0.01.d'
 Sent[2] = 'Sent_L24_Ne3_CG_loc1st6_B0.01.d'
 Sent[3] = 'Sent_L30_Ne3_CG_loc1st6_B0.01.d'

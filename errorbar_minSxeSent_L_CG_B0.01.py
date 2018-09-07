@@ -28,6 +28,23 @@ SxE_ave[L16] = 4.3751015
 SxE_ave[L20] = 4.8310735 
 SxE_ave[L24] = 5.2016302 #check this one
 """
+Sent = [None]*5
+
+Sent[1] = 'minSent_L8_bath4_CG_B0.01.d'
+Sent[2] = 'minSent_L12_bath8_CG_B0.01.d'
+Sent[3] = 'minSent_L16_bath12_CG_B0.01.d'
+Sent[4] = 'minSent_L20_bath16_CG_B0.01.d'
+
+Sent_ave = [1.4821405,1.4680688,1.32090275,1.19370775]
+
+"""
+Sent_ave[8]   = 1.4821405
+Sent_ave[L12] = 1.4680688
+Sent_ave[L16] = 1.32090275
+Sent_ave[L20] = 1.19370775
+Sent_ave[L24] =?
+"""
+
 
 L=[8,12,16,20]
 
@@ -38,9 +55,18 @@ for i in range(1,5):
        R_min= np.divide(min(a),Sxe_ave[i-1])
        R_max= np.divide(max(a),Sxe_ave[i-1])
       
-       plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='bs',elinewidth=0.9,
+       plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='g*',elinewidth=0.6,
                 ms=3,capsize=2,label='R=SxE(min)/SxE(ave)'if i == 1 else "")
 
+
+for i in range(1,5):
+       a = loadtxt(Sent[i])
+       R_mean= np.divide(mean(a),Sent_ave[i-1])
+       R_min= np.divide(min(a),Sent_ave[i-1])
+       R_max= np.divide(max(a),Sent_ave[i-1])
+
+       plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='r*',elinewidth=0.6,
+                ms=3,capsize=2,label='R=Sent(min)/Sent(ave)'if i == 1 else "")
 
 #Ticks
 ax.set_axisbelow(True)
@@ -56,6 +82,6 @@ plt.legend()
 ax.set_xlabel('L', fontsize=12)
 ax.set_ylabel('R', fontsize=12)
 #ax.set_yticks(np.arange(0.5,1.05,0.1))
-ax.set_yticks(np.arange(0.6,0.91,0.1))
+ax.set_yticks(np.arange(0,1.1,0.1))
 ax.set_xticks(L)
 show()

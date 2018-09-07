@@ -56,10 +56,10 @@ for i in range(1,4):
 
 for i in range(1,4):
        a = loadtxt(S[i])
-       R_mean= np.divide(Save[i-1], mean(a))
-       R_min= np.divide(Save[i-1], min(a))
-       R_max= np.divide(Save[i-1], max(a))
-       ax1.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,ms=3,capsize=2,label='R=S(xE,ave)/S(xE,min)'if i == 1 else "")
+       R_mean= np.divide(mean(a),Save[i-1])
+       R_min= np.divide(min(a),Save[i-1])
+       R_max= np.divide(max(a),Save[i-1])
+       ax1.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,ms=3,capsize=2,label='R=SxE(min)/SxE(ave)'if i == 1 else "")
 
 ax1.set_axisbelow(True)
 ax1.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
@@ -67,7 +67,7 @@ ax1.set_title('P maxed in first 5 sites_cmplx Gaussian coeff__N=3_B=0.01',fontsi
 x=[1,2,3]
 x_label=[15,25,30]
 ax1.set_xlabel('L', fontsize=12)
-y_label=np.arange(0.5,2.5,0.5)
+y_label=np.arange(0.5,0.8,0.1)
 ax1.set_yticks(y_label)
 ax1.set_xticks(x)
 ax1.set_xticklabels(x_label)
@@ -78,10 +78,10 @@ for i in range(1,4):
 
 for i in range(1,4):
        a = loadtxt(SS[i])
-       R_mean= np.divide(SSave[i-1], mean(a))
-       R_min= np.divide(SSave[i-1], min(a))
-       R_max= np.divide(SSave[i-1], max(a))
-       ax2.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,ms=3,capsize=2,label='R=S(xE,ave)/S(xE,min)'if i == 1 else "")
+       R_mean= np.divide(mean(a),SSave[i-1])
+       R_min= np.divide(min(a),SSave[i-1])
+       R_max= np.divide(max(a),SSave[i-1])
+       ax2.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,ms=3,capsize=2,label='R=SxE(min)/SxE(ave)'if i == 1 else "")
 
 ax2.set_axisbelow(True)
 ax2.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
@@ -89,7 +89,7 @@ ax2.set_title('P maxed in middle 6 sites_cmplx Gaussian coeff__N=3_B=0.01',fonts
 x=[1,2,3]
 x_label=[18,24,30]
 ax2.set_xlabel('L', fontsize=12)
-y_label=np.arange(0.5,2.5,0.5)
+y_label=np.arange(0.5,0.9,0.1)
 ax2.set_yticks(y_label)
 ax2.set_xticks(x)
 ax2.set_xticklabels(x_label)
@@ -101,10 +101,10 @@ for i in range(1,4):
 
 for i in range(1,4):
        a = loadtxt(Sm5[i])
-       R_mean= np.divide(Sm5ave[i-1], mean(a))
-       R_min= np.divide(Sm5ave[i-1], min(a))
-       R_max= np.divide(Sm5ave[i-1], max(a))
-       ax3.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,ms=3,capsize=2,label='R=S(xE,ave)/S(xE,min)'if i == 1 else "")
+       R_mean= np.divide(mean(a),Sm5ave[i-1])
+       R_min= np.divide(min(a),Sm5ave[i-1])
+       R_max= np.divide(max(a),Sm5ave[i-1])
+       ax3.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,ms=3,capsize=2,label='R=SxE(min)/SxE(ave)'if i == 1 else "")
 
 ax3.set_axisbelow(True)
 ax3.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
@@ -112,7 +112,7 @@ ax3.set_title('P maxed in middle 5 sites_cmplx Gaussian coeff__N=3_B=0.01',fonts
 x=[1,2,3]
 x_label=[15,25,30]
 ax3.set_xlabel('L', fontsize=12)
-y_label=np.arange(0.5,2.5,0.5)
+y_label=np.arange(0.5,0.8,0.1)
 ax3.set_yticks(y_label)
 ax3.set_xticks(x)
 ax3.set_xticklabels(x_label)
@@ -125,17 +125,17 @@ for i in range(1,4):
 
 for i in range(1,4):
        a = loadtxt(S5mR[i])
-       R_mean= np.divide(S5mRave[i-1], mean(a))
-       R_min= np.divide(S5mRave[i-1], min(a))
-       R_max= np.divide(S5mRave[i-1], max(a))
-       ax4.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.2, ms=3,capsize=2,label='R=S(xE,ave)/S(xE,min)'if i == 1 else "")
+       R_mean= np.divide(mean(a),S5mRave[i-1])
+       R_min= np.divide(min(a),S5mRave[i-1])
+       R_max= np.divide(max(a),S5mRave[i-1])
+       ax4.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='rs',elinewidth=0.2, ms=3,capsize=2,label='R=SxE(min)/SxE(ave)'if i == 1 else "")
 ax4.set_axisbelow(True)
 ax4.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
 ax4.set_title('P maxed in middle 5 sites_real Gaussian coeff__N=3_B=0.01',fontsize=6)
 x=[1,2,3]
 x_label=[15,25,30]
 ax4.set_xlabel('L', fontsize=12)
-y_label=np.arange(0.5,2.5,0.5)
+y_label=np.arange(0.5,0.8,0.1)
 ax4.set_yticks(y_label)
 ax4.set_xticks(x)
 ax4.set_xticklabels(x_label)

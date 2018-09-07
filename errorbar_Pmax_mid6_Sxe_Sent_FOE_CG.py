@@ -71,7 +71,7 @@ for i in range(1,5):
        R_max= np.divide(max(a),Sxe_ave[i-1])
       
        plt.errorbar(NM2[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9,
-                ms=3,capsize=2,label='R=Sxe(Pmax)/S(xE,ave)'if i == 1 else "")
+                ms=3,capsize=2,label='R=SxE(Pmax)/SxE(ave)'if i == 1 else "")
 
 for i in range(1,5):
        a = loadtxt(FOE[i])
@@ -80,7 +80,7 @@ for i in range(1,5):
        R_max= np.divide(max(a),FOE_ave[i-1])
 
        plt.errorbar(NM2[i-1],R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='ys',elinewidth=0.9,
-               ms=3,capsize=2,label='R=FOE(Pmax)/(FOE,ave)'if i == 1 else "")
+               ms=3,capsize=2,label='R=FOE(Pmax)/FOE(ave)'if i == 1 else "")
 
 #Ticks
 ax.set_axisbelow(True)
