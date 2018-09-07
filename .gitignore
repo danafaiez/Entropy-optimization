@@ -1,2 +1,5 @@
 *~
-*.d
+ent_ent*.d
+dom_ent*.d
+S_E_t*.d
+
