@@ -647,12 +647,28 @@ int main(int argc, char * argv[])
       double * energy = read_energies(energy_in_name, &pm_in);
       compare_pms(&pm_in,pm);
       double E_ave;
+      int yy=0;
+      char nameD[128];
+     
+     //sprintf(nameD, "file_Pmax.d");
+     //FILE * file_Pmax = fopen(nameD,"w");
+    
+     EG * eg = energy_cell_evectors(pm, size_of_box); 
+     for(yy=0; yy<100;yy++)
+      {
       _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
       _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
       CG * cg = create_CG(pm, size_of_box, numstates);
-      double min_P =  unitary_min(cg, pm, c, evectors,energy);
-      printf("min_P = %lf\n",min_P);
-   }
+      double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
+      //printf("min_P = %lf\n",min_P);
+      //fprintf(file_Pmax,"%lf\n", min_P);
+      }
+      //fclose(file_Pmax);
+      }
+  
+   int uu;
+  for(uu=0; uu < 1;uu++){
+    
    if (evolve_system)
    {
       PARAMS pminit = pm[0];
@@ -717,8 +733,6 @@ int main(int argc, char * argv[])
       freearr_(psi_init);
       psi_init = psit(c_init,hinit,einit,t_shift);
       _Complex double * psi_init_conv = convert1to2(pm, psi_init, pm->Linit, states_init, pm->L, states);
-      //double * psi_prod =  make_product_E_state(eg, pm->num_particles-2, 2, 2, 1);
-      //double * psi_init_conv = convert1to2(pm, psi_prod, pm->Linit, states_init, pm->L, states);
       _Complex double * c = coeff(psi_init_conv, size_(psi_init_conv), evectors);
       _Complex double * psi = psit(c,evectors,energy,time);
 
@@ -728,7 +742,7 @@ int main(int argc, char * argv[])
       double t;
       char nameD[128];
       printf("Dominik entropy:\n time, S_obs\n");
-      sprintf(nameD, "dom_ent_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs);
+      sprintf(nameD, "dom_ent__t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs);
       FILE * dom_ent = fopen(nameD,"w");
       sprintf(nameD, "S_E_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs);
       FILE * file_S_E = fopen(nameD,"w");
@@ -748,11 +762,13 @@ int main(int argc, char * argv[])
       int y, g, gg, ggg;
       sprintf(nameD, "file_Smin.d");
       FILE * file_Smin = fopen(nameD,"w");
+      
       if (minimize)  
       {
+        
          if (0 && minimize_unitary)
          {
-            double min_P =  unitary_min(cg, pm,  c, evectors,energy);
+            double min_P =  unitary_min(cg, pm, c, evectors, energy, eg);
             printf("min_P = %lf\n",min_P);
          }
          else
@@ -782,7 +798,7 @@ int main(int argc, char * argv[])
          printf("density_S[t=0]:\n");
          for (int index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix_0[index]);}}
-        */
+   
           if (t==0){
          _Complex double * ct = 0;
           int ii;
@@ -792,8 +808,8 @@ int main(int argc, char * argv[])
           expE_t += energy[ii]*SQR(cabs(ct[ii]));}
           printf("Energy of the whole box (t=0):\n");
           printf("%lf\n",expE_t);}
-          
-//*/          
+  */        
+//          
 
  
          if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
@@ -819,7 +835,7 @@ int main(int argc, char * argv[])
       fclose(dom_ent);
       fclose(file_S_E);
       fclose(ent_entr_vs_t);
-  }
+  }}
    if (calc_reduced_evs)
    {
       FILE * evectors_in = read_header(evector_in_name, pm);
@@ -998,6 +1014,8 @@ int main(int argc, char * argv[])
          fclose(fname);
       }
    }
+
+free(pm);
 }
 #else
 int main(int argc, char * argv[])

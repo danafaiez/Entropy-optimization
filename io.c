@@ -202,7 +202,7 @@ double * read_energies(char * energy_in_name, PARAMS * pm)
    _fread(energies, n);
 
    fclose(energy_in);
-
+   free(magic);
    return energies;
 }
 

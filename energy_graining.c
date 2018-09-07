@@ -134,7 +134,7 @@ EG * energy_cell_evectors(PARAMS * pm, int size_of_box)
 
       eg->evectors = evectors;
       eg->energy = e;
-
+      freearr_(done);
       return eg;
 }
 

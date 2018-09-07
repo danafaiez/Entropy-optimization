@@ -46,7 +46,7 @@ ull ** calc_regions_x(PARAMS * pm)
    int i;
    ull ** regions;
    ull * region_sizes;
-   int n_reg = (pm->x_fin) - (pm->x_init) -1;
+   //int n_reg = (pm->x_fin) - (pm->x_init) -1;
    ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
    int num_in=0, num_out=0;
    int IN=0, OUT=1;
