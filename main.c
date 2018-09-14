@@ -650,20 +650,21 @@ int main(int argc, char * argv[])
       int yy=0;
       char nameD[128];
      
-     //sprintf(nameD, "file_Pmax.d");
-     //FILE * file_Pmax = fopen(nameD,"w");
+     sprintf(nameD, "file_Pmax.d");
+     FILE * file_Pmax = fopen(nameD,"w");
     
      EG * eg = energy_cell_evectors(pm, size_of_box); 
-     for(yy=0; yy<100;yy++)
+     for(yy=0; yy<10;yy++)
       {
-      _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
-      _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
+	 _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
+	 _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
       CG * cg = create_CG(pm, size_of_box, numstates);
       double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
-      //printf("min_P = %lf\n",min_P);
-      //fprintf(file_Pmax,"%lf\n", min_P);
+      printf("P_max = %lf\n",min_P);
+      
+      fprintf(file_Pmax,"%lf\n", min_P);
       }
-      //fclose(file_Pmax);
+      fclose(file_Pmax);
       }
   
    int uu;
@@ -773,7 +774,7 @@ int main(int argc, char * argv[])
          }
          else
          {
-            for (g=0; g <100  ; g++){
+            for (g=0; g <1  ; g++){
                double sfval = 0;
                sfval = Entropy_min(pm, cg, c, evectors, energy, eg);
                fprintf(file_Smin,"%lf\n", sfval);}
@@ -829,7 +830,9 @@ int main(int argc, char * argv[])
          freearr_(psi_energy_basis);
          free2darr_(cg->Ps);
          free2darr_(cg->density);
-      }
+         freearr_(cg->states); 
+         free2darr_(cg->c_g);
+     }
       if (print_dens)  fprintf(file_Ps,"]");
       if (print_dens)  fclose(file_Ps);
       fclose(dom_ent);

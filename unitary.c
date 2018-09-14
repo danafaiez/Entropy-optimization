@@ -186,11 +186,11 @@ double  newPsi(PSI_STATE * psi_state)
       if (count%200 == 0)
       {
          int minimum_found=0;
-         //printf("P = %lf\n",norm);//uncommoment this later
+         printf("P = %lf\n",norm);//uncomment this later
          double * derivs = firstDeriv(z,psi_state->J);
          double deriv_error = L2(derivs,N);
          deriv_error = sqrt(deriv_error);
-         //printf("deriv_error = %g\n",deriv_error);//uncommoment this later
+         printf("deriv_error = %g\n",deriv_error);//uncomment this later
          
          if (deriv_error < 1e-10)
          {
@@ -220,23 +220,23 @@ double  newPsi(PSI_STATE * psi_state)
           psiN[y] += a[iE]*z[iE]*evector[y];
          }
        }
-/*
-         //CG * cg = create_CG(pm, size_of_box,numstates);
+
+  /*       //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          //printf ("S_EX(unitary maxP) = %5f\n",S_o); 
          printf ("%5f\n",S_o);
-      
+  
          //observational entropy_FOE// 
         _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, psiN);
          double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);         
         //printf("S_FOE_corres = %lf\n",S_f_corres);
         printf("%lf\n",S_f_corres);
-
+*/
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
          //printf("S_ent = %lf\n",S_ent_corres);
          printf ("%5f\n",S_ent_corres);
  
- 
+/* 
 //calculating number density
       
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
@@ -244,10 +244,8 @@ double  newPsi(PSI_STATE * psi_state)
          printf("density_S:\n");
          int index;
          for (index=0;index < pm->L;index++){
-         printf("%lf\n",density_matrix[index]);}
-
+        printf("%lf\n",density_matrix[index]);}
  
-
 //calculating psi1 using psiEs and region
 
          int i,j,u,J,l,ii;
@@ -621,7 +619,7 @@ min_so_far);
             //%g\n",iter,gsl_vector_get(s->x,0),gsl_vector_get(s->x,1),gsl_vector_get
             //(s->x,2),s->fval,size);
          }
-         while (status == GSL_CONTINUE && iter < 1000);
+         while (status == GSL_CONTINUE && iter < 250000);
 
 
          if (s->fval < min_so_far)

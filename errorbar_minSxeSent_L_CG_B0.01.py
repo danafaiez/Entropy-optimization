@@ -65,7 +65,7 @@ for i in range(1,5):
        R_min= np.divide(min(a),Sent_ave[i-1])
        R_max= np.divide(max(a),Sent_ave[i-1])
 
-       plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='r*',elinewidth=0.6,
+       plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='m*',elinewidth=0.6,
                 ms=3,capsize=2,label='R=Sent(min)/Sent(ave)'if i == 1 else "")
 
 #Ticks
@@ -73,7 +73,7 @@ ax.set_axisbelow(True)
 ax.minorticks_on()
 ax.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
 ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
-ax.tick_params(which='both',top='on',left='on',right='on', bottom='on') 
+ax.tick_params(which='both',top='off',left='on',right='on', bottom='on') 
 
 
 # Adding plotting parameters
@@ -84,4 +84,5 @@ ax.set_ylabel('R', fontsize=12)
 #ax.set_yticks(np.arange(0.5,1.05,0.1))
 ax.set_yticks(np.arange(0,1.1,0.1))
 ax.set_xticks(L)
+plt.savefig("min_Sent_Sxe",bbox_inches='tight')
 show()

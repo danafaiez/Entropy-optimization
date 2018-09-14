@@ -43,31 +43,29 @@ NM2=np.divide(N,np.power(M,2))
 
 for i in range(1,10):     
        a = loadtxt(PR[i])
-       plt.errorbar(NM2[i-1],mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,fmt='g*',elinewidth=0.6,
-                ms=4,capsize=1,label='Pmax\nReal Gaussian coeff'if i == 1 else "")
+       plt.errorbar(NM2[i-1],mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,color='crimson',fmt='.',elinewidth=0.6,
+                ms=4,capsize=1,label='Real Gaussian coeff'if i == 1 else "")
 
 for i in range(1,10):
        a = loadtxt(PC[i])
-       plt.errorbar(NM2[i-1],mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,fmt='r*',elinewidth=0.6,
-                ms=4,capsize=1,label='Pmax\nComplex Gaussian coeff'if i == 1 else "")
+       plt.errorbar(NM2[i-1],mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,fmt='k.',elinewidth=0.6,
+                ms=4,capsize=1,label='Complex Gaussian coeff'if i == 1 else "")
 
-
+#Ticks
 ax.set_axisbelow(True)
 ax.minorticks_on()
-# Customize the major grid
 ax.grid(which='major', linestyle=':', linewidth='0.5', color='gray')
-# Customize the minor grid
 ax.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
-# display of all ticks.
-ax.tick_params(which='both',top='on',left='on',right='on', bottom='on') 
+ax.tick_params(which='both',top='off',left='on',right='on', bottom='on') 
 
 #ax.legend(loc='best', frameon=True)
 
 # Adding plotting parameters
 plt.legend()
-plt.title('P maxed in middle 5 sites with real and complex Gaussian coeff;N=3;B=0.01',fontsize=10)
+#plt.title('P maxed in middle 5 sites with real and complex Gaussian coeff;N=3;B=0.01',fontsize=10)
 ax.set_xlabel('$\\frac{N}{M^{2}}$', fontsize=12)
 ax.set_ylabel('$P_{max}$', fontsize=12)
-ax.set_yticks(np.arange(0.5,1.05,0.1))
-ax.set_xticks(np.arange(0, max(NM2), 3))
+ax.set_yticks(np.arange(0.4,1.05,0.1))
+ax.set_xticks(np.arange(0, np.add(max(NM2),3), 3))
+plt.savefig("error_Pmax_mid5.png",bbox_inches='tight')
 show()

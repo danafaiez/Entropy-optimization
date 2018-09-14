@@ -49,7 +49,7 @@ SxE_ave= [4.3828965,5.6948083,6.6200108,7.3174784,7.8856833]
 #SxE_ave_L10=4.3828965 
 
 #FOE:
-FOE[5] = 'FOE_L30_Ne3_complG_sob5_B0.01.d' #do this overnight remotely
+FOE[5] = 'FOE_L30_Ne3_complG_sob5_B0.01.d' #done remotely-killed after 15th iter
 FOE[4] = 'FOE_L25_Ne3_complG_sob5_B0.01.d'
 FOE[3] = 'FOE_L20_Ne3_complG_sob5_B0.01.d'
 FOE[2] = 'FOE_L15_Ne3_complG_sob5_B0.01.d'
@@ -71,8 +71,8 @@ NM2=np.divide(N,np.power(M,2))
 
 for i in range(1,6):     
        a = loadtxt(P[i])
-       plt.errorbar(i,mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,fmt='bs',elinewidth=0.6,
-                ms=4,capsize=1,label='Pmax'if i == 1 else "")
+       plt.errorbar(i,mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,fmt='k.',elinewidth=0.6,
+                ms=4,capsize=1,label='Pmax'if i ==1 else "")
 
 
 for i in range(1,6):
@@ -82,7 +82,7 @@ for i in range(1,6):
        R_max= np.divide(max(a),Sent_ave[i-1])
       
        plt.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='m*',elinewidth=0.6,
-                ms=3,capsize=2,label='R=Sent(min)/Sent(ave)'if i == 1 else "")
+                ms=3,capsize=2,label='R=Sent(loc)/Sent(ave)'if i == 1 else "")
 
 
 for i in range(1,6):
@@ -92,7 +92,7 @@ for i in range(1,6):
        R_max= np.divide(max(a),SxE_ave[i-1])
 
        plt.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='g*',elinewidth=0.6,
-                ms=3,capsize=2,label='R=SxE(min)/SxE(ave)'if i == 1 else "")
+                ms=3,capsize=2,label='R=SxE(loc)/SxE(ave)'if i == 1 else "")
 
 for i in range(1,6):
        a = loadtxt(FOE[i])
@@ -101,7 +101,7 @@ for i in range(1,6):
        R_max= np.divide(max(a),FOE_ave[i-1])
 
        plt.errorbar(i,R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='r*',elinewidth=0.6,
-                ms=3,capsize=2,label='R=FOE(min)/FOE(ave)'if i == 1 else "")
+                ms=3,capsize=2,label='R=FOE(loc)/FOE(ave)'if i == 1 else "")
 
 
 ax.set_axisbelow(True)
@@ -121,7 +121,7 @@ plt.title('P maxed in last 5 sites_cmplx Gaussian coeff__N=3_B=0.01')
 x=[1,2,3,4,5]
 x_label=[10,15,20,25,30]
 ax.set_xlabel('L', fontsize=12)
-y_label=np.arange(0.5,0.66,0.05)
+y_label=np.arange(0.4,0.85,0.05)
 ax.set_yticks(y_label)
 ax.set_xticks(x)
 ax.set_xticklabels(x_label)

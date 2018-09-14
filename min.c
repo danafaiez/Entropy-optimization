@@ -154,14 +154,14 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          
          if (status == GSL_SUCCESS)
            {
-       //     printf ("S converged to minimum at\n");
+            //printf ("S converged to minimum at\n");
            }   
          //printf ("%5d f() = %7.3f \n",iter, s->fval);
        }
 
     while (status == GSL_CONTINUE && iter < 20000000);
  //     printf ("Smin = %7.6f\n",s->fval);
-   printf ("%7.7f\n",s->fval);
+        printf ("%7.7f\n",s->fval);//}
 
 
 //Calculating the coarse_density//
@@ -189,11 +189,10 @@ printing the sum of the probabilities*
    printf("\n");
 
 
-
 //calculating number density operator using psi(s->x) from the last iteration in the minimization loop//
 
 //condition for calculating <N>//
-//if ((s->fval)<2.224){
+//if ((s->fval)<0.007){
 
  _Complex double * psi = psi_phi(s->x, coef, psiEs);
  ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
@@ -261,7 +260,7 @@ printf("S_f_corres = %lf\n",S_f_corres);
 */
     gsl_vector_free(x);
     gsl_vector_free(ss);
-    gsl_multimin_fminimizer_free (s);
+    gsl_multimin_fminimizer_free(s);
 //  return status;
     double sfval = s->fval;
     return sfval;

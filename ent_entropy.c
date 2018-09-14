@@ -211,7 +211,6 @@ double * calc_ent_entropy_(double * evectors, PARAMS * pm, int num_bath_sites, i
       for(i=0; i < num_bath_particles_max+1; i++)
 	 free(rho_micro[i]);
    }
-
    return S;
 }
 

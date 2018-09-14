@@ -12,15 +12,15 @@ fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 
 Y = [None]*4
-S = [None]*4
+SxE = [None]*4
 
-Y[3] = 'Pmax_L30_Ne3_bath5_complG_locside_B0.01.d'
-Y[2] = 'Pmax_L25_Ne3_bath5_complG_locside_B0.01.d'
-Y[1] = 'Pmax_L15_Ne3_bath5_complG_locside_B0.01.d'
+Y[3] = 'Pmax_L30_Ne3_complG_loc1st5_B0.01.d'
+Y[2] = 'Pmax_L25_Ne3_complG_loc1st5_B0.01.d'
+Y[1] = 'Pmax_L15_Ne3_complG_loc1st5_B0.01.d'
 
-S[3] = 'Smin_L30_Ne3_bath5_complG_locside_B0.01.d'
-S[2] = 'Smin_L25_Ne3_bath5_complG_locside_B0.01.d'
-S[1] = 'Smin_L15_Ne3_bath5_complG_locside_B0.01.d'
+SxE[3] = 'SxE_L30_Ne3_complG_loc1st5_B0.01.d'
+SxE[2] = 'SxE_L25_Ne3_complG_loc1st5_B0.01.d'
+SxE[1] = 'SxE_L15_Ne3_complG_loc1st5_B0.01.d'
 
 Save= [5.697788,7.316264,7.882103]
 
@@ -36,7 +36,7 @@ for i in range(1,4):
 
 
 for i in range(1,4):
-       a = loadtxt(S[i])
+       a = loadtxt(SxE[i])
        R_mean= np.divide(mean(a),Save[i-1])
        R_min= np.divide(min(a),Save[i-1])
        R_max= np.divide(max(a),Save[i-1])
