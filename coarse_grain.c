@@ -69,7 +69,7 @@ int ** create_x_coarse_graining(CG * cg,  int num_particles, int size_of_box, ul
    //freearr_(signature);
    cg->sig_arr = sig_arr;
    htable_free(ht);
-   free2darr_(sig_arr); 
+   //free2darr_(sig_arr); 
    return c_g;
 
 }

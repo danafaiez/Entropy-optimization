@@ -830,8 +830,8 @@ int main(int argc, char * argv[])
          freearr_(psi_energy_basis);
          free2darr_(cg->Ps);
          free2darr_(cg->density);
-         freearr_(cg->states); 
-         free2darr_(cg->c_g);
+         //freearr_(cg->states); 
+         //free2darr_(cg->c_g);
      }
       if (print_dens)  fprintf(file_Ps,"]");
       if (print_dens)  fclose(file_Ps);
