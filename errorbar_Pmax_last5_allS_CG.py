@@ -6,7 +6,7 @@ from scipy.special import factorial
 import matplotlib.cm as cm
 #Probability of localizing 3 particles in the last 5 sites is maximized using unitary.c, 2 times, each time starting with a different random set of complex gaussian coefficients
 #with parameters: -t 1.90 -tp 1.90 -U 0.50 -Up 0.50, B=0.01, complex gaussian coeff, L-bath sites=5. the corresponsing S_ent, FOE, and SxE is then found at each iteration. 
-
+# I dont think the corresponding ent entropt is correct 
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)

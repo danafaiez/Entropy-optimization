@@ -251,7 +251,8 @@ double calc_ent_entropy_one_ev_complex_(_Complex double * evector, PARAMS * pm, 
       }
       for(i=0; i < num_bath_particles_max+1; i++)
 	  free(red_rho[i]);
-   }
+      free(red_rho);  
+ }
 
    freearr_(binary_basis);
    free(basis_size);

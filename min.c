@@ -150,7 +150,7 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          if (status)
              break;
          size = gsl_multimin_fminimizer_size (s);
-         status = gsl_multimin_test_size (size, 1e-2);
+         status = gsl_multimin_test_size (size, 1e-9);
          
          if (status == GSL_SUCCESS)
            {
@@ -159,9 +159,9 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          //printf ("%5d f() = %7.3f \n",iter, s->fval);
        }
 
-    while (status == GSL_CONTINUE && iter < 20000000);
- //     printf ("Smin = %7.6f\n",s->fval);
-        printf ("%7.7f\n",s->fval);//}
+    while (status == GSL_CONTINUE && iter < 2000000);
+    // printf ("Smin = %7.6f\n",s->fval);
+      printf ("%7.7f\n",s->fval);//}
 
 
 //Calculating the coarse_density//

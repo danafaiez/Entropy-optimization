@@ -654,14 +654,14 @@ int main(int argc, char * argv[])
      FILE * file_Pmax = fopen(nameD,"w");
     
      EG * eg = energy_cell_evectors(pm, size_of_box); 
-     for(yy=0; yy<10;yy++)
+     for(yy=0; yy<2;yy++)
       {
 	 _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
 	 _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
       CG * cg = create_CG(pm, size_of_box, numstates);
       double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
-      printf("P_max = %lf\n",min_P);
-      
+      //printf("P_max = %lf\n",min_P);
+      //  printf("%lf\n",min_P); 
       fprintf(file_Pmax,"%lf\n", min_P);
       }
       fclose(file_Pmax);
@@ -774,7 +774,7 @@ int main(int argc, char * argv[])
          }
          else
          {
-            for (g=0; g <1  ; g++){
+            for (g=0; g <5  ; g++){
                double sfval = 0;
                sfval = Entropy_min(pm, cg, c, evectors, energy, eg);
                fprintf(file_Smin,"%lf\n", sfval);}
@@ -792,14 +792,21 @@ int main(int argc, char * argv[])
          _Complex double * psi_energy_basis=0;
          t = delta_t*k;
          psi = psit(c,evectors,energy,t);
-         /*
+/*         
          if (t==0){
          ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix_0 = den(pm, psi,binary_basis_0);
          printf("density_S[t=0]:\n");
          for (int index=0;index < pm->L;index++){
-         printf("%lf\n",density_matrix_0[index]);}}
+         printf("%lf\n",density_matrix_0[index]);}
+     
+         //calculating Sent at t=0
+         double S_ent_corres = calc_ent_entropy_one_ev_complex_(psi, pm,pm->num_bath_sites); 
+         printf("S_ent(t=0) = %lf\n",S_ent_corres);}
    
+         
+
+
           if (t==0){
          _Complex double * ct = 0;
           int ii;
@@ -809,7 +816,7 @@ int main(int argc, char * argv[])
           expE_t += energy[ii]*SQR(cabs(ct[ii]));}
           printf("Energy of the whole box (t=0):\n");
           printf("%lf\n",expE_t);}
-  */        
+  */     
 //          
 
  
