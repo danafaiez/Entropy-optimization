@@ -55,6 +55,10 @@ double * energy(ull * states, PARAMS * pm)
                   int m_neigh = nn[neigh][m][n];
                   if (m_neigh >= 0 && m_neigh < L)
                   {
+                     
+                    if ( (m>=0&&m<4&&((nn[neigh][m][n])>=0)&&((nn[neigh][m][n])<4)) || (m>=4&&m<(L-4)&&((nn[neigh][m][n])>=4)&&((nn[neigh][m][n])<(L-4))) )
+                     {
+                     
                      int sign = 1;
                      ull ket = states[ket_ind];
                      ull ket_anh = a(ket,m_neigh,L,&sign);
@@ -65,7 +69,8 @@ double * energy(ull * states, PARAMS * pm)
                         continue;
                      assert(ket_create_anh == states[indx[0]]);
                      H(indx[0],ket_ind) += -t[neigh]*sign;
-                  }
+                   } 
+                 }
                }
             }
          }

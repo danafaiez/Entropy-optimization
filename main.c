@@ -650,21 +650,21 @@ int main(int argc, char * argv[])
       int yy=0;
       char nameD[128];
      
-     sprintf(nameD, "file_Pmax.d");
-     FILE * file_Pmax = fopen(nameD,"w");
+     //sprintf(nameD, "file_Pmax.d");
+     //FILE * file_Pmax = fopen(nameD,"w");
     
      EG * eg = energy_cell_evectors(pm, size_of_box); 
-     for(yy=0; yy<2;yy++)
+     for(yy=0; yy<1;yy++)
       {
 	 _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
 	 _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
       CG * cg = create_CG(pm, size_of_box, numstates);
       double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
-      //printf("P_max = %lf\n",min_P);
-      //  printf("%lf\n",min_P); 
-      fprintf(file_Pmax,"%lf\n", min_P);
+      printf("P_max = %lf\n",min_P);
+        printf("%lf\n",min_P); 
+      //fprintf(file_Pmax,"%lf\n", min_P);
       }
-      fclose(file_Pmax);
+      //fclose(file_Pmax);
       }
   
    int uu;
@@ -753,7 +753,7 @@ int main(int argc, char * argv[])
       if (print_dens) file_Ps = fopen("Ps.json","w");
     //ull ** regions =  calc_regions( pm);
       int k;
-      int tot_its = time/delta_t;
+      int tot_its = time/delta_t; 
       int num_x = cg->L/cg->size_of_box;
       //fprintf(file_Ps,"[%d,%d,%d],\n[",num_x,cg->numCoarseEs,tot_its);
       if (print_dens) fprintf(file_Ps,"[");
@@ -774,7 +774,7 @@ int main(int argc, char * argv[])
          }
          else
          {
-            for (g=0; g <5  ; g++){
+            for (g=0; g <2  ; g++){
                double sfval = 0;
                sfval = Entropy_min(pm, cg, c, evectors, energy, eg);
                fprintf(file_Smin,"%lf\n", sfval);}
@@ -792,7 +792,7 @@ int main(int argc, char * argv[])
          _Complex double * psi_energy_basis=0;
          t = delta_t*k;
          psi = psit(c,evectors,energy,t);
-/*         
+         
          if (t==0){
          ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix_0 = den(pm, psi,binary_basis_0);
@@ -804,7 +804,7 @@ int main(int argc, char * argv[])
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psi, pm,pm->num_bath_sites); 
          printf("S_ent(t=0) = %lf\n",S_ent_corres);}
    
-         
+/*         
 
 
           if (t==0){
