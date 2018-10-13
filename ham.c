@@ -19,7 +19,7 @@ double * energy(ull * states, PARAMS * pm)
    double *h;
    newarr_(h,(numstates*numstates));
    HTABLE * hash = create_hash(states);
-
+   int bath = pm->num_bath_sites;
    int neigh;
    for(neigh=0;neigh < 2; neigh++)
    {
@@ -56,8 +56,8 @@ double * energy(ull * states, PARAMS * pm)
                   if (m_neigh >= 0 && m_neigh < L)
                   {
                      
-                    if ( (m>=0&&m<4&&((nn[neigh][m][n])>=0)&&((nn[neigh][m][n])<4)) || (m>=4&&m<(L-4)&&((nn[neigh][m][n])>=4)&&((nn[neigh][m][n])<(L-4))) )
-                     {
+     //               if ((m>=0&&m<(L-bath)&&((nn[neigh][m][n])>=0)&&((nn[neigh][m][n])<(L-bath))) || (m>=(L-bath)&&m<(L)&&((nn[neigh][m][n])>=(L-bath))&&((nn[neigh][m][n])<(L))) ) 
+       //              {
                      
                      int sign = 1;
                      ull ket = states[ket_ind];
@@ -69,7 +69,7 @@ double * energy(ull * states, PARAMS * pm)
                         continue;
                      assert(ket_create_anh == states[indx[0]]);
                      H(indx[0],ket_ind) += -t[neigh]*sign;
-                   } 
+    //               } 
                  }
                }
             }
