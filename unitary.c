@@ -225,42 +225,33 @@ double  newPsi(PSI_STATE * psi_state)
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          printf ("S_EX(unitary maxP) = %5f\n",S_o); 
         //printf ("%5f\n",S_o);
- */
+*/ 
         //observational entropy_FOE// 
         _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, psiN);
          double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);         
         printf("S_FOE_corres = %lf\n",S_f_corres);
         //printf("%lf\n",S_f_corres);
 
-         double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
+/*         double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
          printf("S_ent = %lf\n",S_ent_corres);
          //printf ("%5f\n",S_ent_corres);
  
-      
+*/ 
 //calculating FOE of small or large region:
   //calculating psif using psiEs and region
 
          int l,jj,f;
          complx * psif;
-         int L=N-M;
          newarr_(psif,N);
+         ull * regions = (calc_regions(pm))[0];
+         int size = size_(regions);
 
-        ull * regions = (calc_regions(pm))[0];
-        int size = size_(regions);
-        for (l=0;l<N;l++){
-        f=0;
-         while (f<size)
-          if (l==regions[f]){
-           for (jj=0;jj<N;jj++){ //filling out the l'th component of each of N row of psif. Each component correspond to a particular config (l'th config)
-            double * evector = psiEs+N*jj;//
-            psif[jj] += a[jj]*z[jj]*evector[l];}//closing j loop
-           break;}//closing if 
-          else{
-           f++;}}
-           //psif[l]=0;}}//closing while and i loop 
-
-
-        //observational entropy_FOE of box given psif// 
+         for (f=0;f<size;f++){      
+         for (l=0;l<N;l++){
+         double * evector = psiEs+N*l; 
+         psif[regions[f]] += a[l]*z[l]*evector[regions[f]];}}
+       
+//observational entropy_FOE of box given psif// 
         _Complex double * psi_e_b_corres_box = transform_pos_to_energy(eg, psif);
          double S_f_corres_box = Sobs_fine_grain_E(psi_e_b_corres_box);
         printf("S_FOE_corres_box = %lf\n",S_f_corres_box);
