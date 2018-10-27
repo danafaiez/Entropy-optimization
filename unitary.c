@@ -232,11 +232,11 @@ double  newPsi(PSI_STATE * psi_state)
         printf("S_FOE_corres = %lf\n",S_f_corres);
         //printf("%lf\n",S_f_corres);
 
-/*         double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
+         double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
          printf("S_ent = %lf\n",S_ent_corres);
          //printf ("%5f\n",S_ent_corres);
  
-*/ 
+ 
 //calculating FOE of small or large region:
   //calculating psif using psiEs and region
 
@@ -245,17 +245,20 @@ double  newPsi(PSI_STATE * psi_state)
          newarr_(psif,N);
          ull * regions = (calc_regions(pm))[0];
          int size = size_(regions);
-
+         double norm =0;
          for (f=0;f<size;f++){      
          for (l=0;l<N;l++){
          double * evector = psiEs+N*l; 
          psif[regions[f]] += a[l]*z[l]*evector[regions[f]];}}
-       
+         norm = 1.0/sqrt(L2((double *) psif, 2*N));
+         for(j=0;j < N;j++){
+         psif[j] *= norm;}
+
 //observational entropy_FOE of box given psif// 
         _Complex double * psi_e_b_corres_box = transform_pos_to_energy(eg, psif);
          double S_f_corres_box = Sobs_fine_grain_E(psi_e_b_corres_box);
         printf("S_FOE_corres_box = %lf\n",S_f_corres_box);
-
+/*
 //calculating number density
       
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
@@ -264,7 +267,7 @@ double  newPsi(PSI_STATE * psi_state)
          int index;
          for (index=0;index < pm->L;index++){
         printf("%lf\n",density_matrix[index]);}
-/* 
+ 
 //calculating psi1 using psiEs and region
 
          int i,j,u,J,l,ii;
@@ -286,7 +289,7 @@ double  newPsi(PSI_STATE * psi_state)
            u++;
            psi1[i]=0;}}//closing while and i loop
 
-//calculating psi1 using W  
+//calculating psi2 using W  
         int uu;
         double expE_W=0;
         complx * psi2;
