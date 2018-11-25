@@ -73,7 +73,6 @@ N=factorial(L)/(factorial(Ne)*factorial(L-Ne))
 M=factorial(l)/(factorial(Ne)*factorial(l-Ne))
 NM2=np.divide(N,np.power(M,2))
 
-
 for i in range(1,5):
        a = loadtxt(Sxe[i])
        R_mean= np.divide(mean(a),Sxe_ave[i-1])
@@ -92,6 +91,9 @@ for i in range(1,5):
 
        plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='m*',elinewidth=0.6,
                 ms=3,capsize=2,label=r'$R(S_{ent})$,Bath$=L-4$'if i == 1 else "")
+
+
+
 """
 for i in range(1,5):
        a = loadtxt(Sent_half[i])
@@ -101,15 +103,19 @@ for i in range(1,5):
 
        plt.errorbar(N[i-1],R_mean, yerr=np.array([[R_mean-R_min,R_max-R_mean]]).T,fmt='b*',elinewidth=0.6,
                 ms=3,capsize=2,label=r'$R(S_{ent})$,Bath$=L/2$'if i == 1 else "")
+
+
+#plt.scatter(L,Sxe_ave)
+
+for i in range(1,5):
+       a = loadtxt(Sxe[i])
+       plt.errorbar(L[i-1],mean(a), yerr=np.array([[mean(a)-min(a) ,max(a)-mean(a)]]).T,fmt='g*',elinewidth=0.6, ms=3,capsize=2,label=r'$S_{xE})$'if i == 1 else"")
 """
-#plt.scatter(N,R_S_th)
-# Adding plotting parameters
 plt.legend()
-#plt.title('Sxe is minimized with sob=4, cmplx Gaussian coeff, 2 particles, B=0.01')
-ax.set_xlabel('L', fontsize=12)
-ax.set_ylabel('R', fontsize=12)
-#ax.set_yticks(np.arange(0.5,1.05,0.1))
-ax.set_yticks(np.arange(0,1.1,0.1))
+ax.set_xlabel('L', fontsize=15)
+ax.set_ylabel('R', fontsize=15)
+ax.tick_params(direction='out', colors='k', labelsize=14)
+#ax.set_yticks(np.arange(0,1.1,0.2))
 ax.set_xticks(L)
-plt.savefig("min_Sent_Sxe",bbox_inches='tight')
+plt.savefig("min_Sent_Sxe.eps",format='eps',bbox_inches='tight')
 show()

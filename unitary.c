@@ -150,7 +150,7 @@ double  newPsi(PSI_STATE * psi_state)
    double * energy = psi_state->energy;
    CG * cg = psi_state->cg;
    EG * eg = psi_state->eg; 
- 
+   //FILE * filesxe = psi_state->file;
    int i,j,count,countmax=40000;
    int N = psi_state->N;
    int M = psi_state->M;
@@ -163,7 +163,7 @@ double  newPsi(PSI_STATE * psi_state)
    double norm;
    newarr_(psi,M); 
    newarr_(z,N);
-
+   
    for(i=0;i<N;i++)
    {
       complx g = c_gaussian_random();
@@ -208,7 +208,7 @@ double  newPsi(PSI_STATE * psi_state)
          }
         
         if (minimum_found){
-
+/*
        //PsiN for entropy//       
          newarr_(psiN,N);
          int y;      
@@ -221,21 +221,31 @@ double  newPsi(PSI_STATE * psi_state)
          }
        }
 
-/*        //CG * cg = create_CG(pm, size_of_box,numstates);
          double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          printf ("S_EX(unitary maxP) = %5f\n",S_o); 
-        //printf ("%5f\n",S_o);
-*/ 
+         //printf ("%5f\n",S_o);
+
         //observational entropy_FOE// 
         _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, psiN);
          double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);         
         printf("S_FOE_corres = %lf\n",S_f_corres);
-        //printf("%lf\n",S_f_corres);
+       // printf("%lf\n",S_f_corres);
 
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
          printf("S_ent = %lf\n",S_ent_corres);
          //printf ("%5f\n",S_ent_corres);
  
+
+
+//calculating number density
+      
+         ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+         double * density_matrix = den(pm, psiN, binary_basis); 
+         printf("density_S:\n");
+         int index;
+         for (index=0;index < pm->L;index++){
+         printf("%lf\n",density_matrix[index]);}
+
  
 //calculating FOE of small or large region:
   //calculating psif using psiEs and region
@@ -258,15 +268,7 @@ double  newPsi(PSI_STATE * psi_state)
         _Complex double * psi_e_b_corres_box = transform_pos_to_energy(eg, psif);
          double S_f_corres_box = Sobs_fine_grain_E(psi_e_b_corres_box);
         printf("S_FOE_corres_box = %lf\n",S_f_corres_box);
-/*
-//calculating number density
-      
-         ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
-         double * density_matrix = den(pm, psiN, binary_basis); 
-         printf("density_S:\n");
-         int index;
-         for (index=0;index < pm->L;index++){
-        printf("%lf\n",density_matrix[index]);}
+
  
 //calculating psi1 using psiEs and region
 
@@ -794,6 +796,7 @@ double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * 
    psi_state.a = cabs_array(coef);
    double ** J = makeJ(&psi_state);
    psi_state.J = J;
+   //psi_state.file=filesxe;
  
    int size_of_box = cg->size_of_box;
    psi_state.size_of_box = size_of_box;

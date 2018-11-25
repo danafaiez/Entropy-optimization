@@ -154,14 +154,14 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          
          if (status == GSL_SUCCESS)
            {
-            printf ("S converged to minimum at\n");
+            //printf ("S converged to minimum at\n");
            }   
          //printf ("%5d f() = %7.3f \n",iter, s->fval);
        }
 
     while (status == GSL_CONTINUE && iter < 2000000);
-     printf ("Smin = %7.6f\n",s->fval);
-    //  printf ("%7.7f\n",s->fval);//}
+    //printf ("Smin = %7.6f\n",s->fval);
+     printf ("%7.7f\n",s->fval);
 
 
 //Calculating the coarse_density//
@@ -193,7 +193,7 @@ printing the sum of the probabilities*
 
 //condition for calculating <N>//
 //if ((s->fval)<0.007){
-*/
+
  _Complex double * psi = psi_phi(s->x, coef, psiEs);
  ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
  double * density_matrix = den(pm, psi, binary_basis);
@@ -204,7 +204,7 @@ printing the sum of the probabilities*
         printf("%lf\n",density_matrix[index]);
     }
 //}
-/*
+
 //calculating S_ent using s->x // 
 _Complex double * vec = psi_phi(s->x, coef, psiEs);
 //double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);
@@ -221,6 +221,22 @@ _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, vec);
 printf("S_ent_corres = %lf\n",S_ent_corres);
 printf("S_ex_corres = %lf\n",S_ex_corres);
 printf("S_f_corres = %lf\n",S_f_corres);
+
+
+//calculating psif using psiEs and region
+
+         int l,jj,f;
+         complx * psif;
+         newarr_(psif,N);
+         ull * regions = (calc_regions(pm))[0];//chnage this to some other region where it can be controled by x_init and x_fin 
+         int size = size_(regions);
+         double phi_f;
+         for (f=0;f<size;f++){
+         for (l=0;l<N;l++){
+         phi_f = gsl_vector_get(s->x, l);
+         _Complex double exp_iphif = cexp((-1.0*I)*phi_f);
+         double * evector = psiEs+N*l;
+         psif[regions[f]] += coef[l]*exp_iphif*evector[regions[f]];}
 
 
 //calculating expectation value of energy for the state with minS
