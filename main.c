@@ -652,23 +652,63 @@ int main(int argc, char * argv[])
      
      //sprintf(nameD, "file_Pmax.d");
      //FILE * file_Pmax = fopen(nameD,"w");
-    
      EG * eg = energy_cell_evectors(pm, size_of_box); 
-     for(yy=0; yy<1;yy++)
+     
+     for(yy=0; yy<6;yy++)
       {
-	 _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
-	 _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
+      _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
+      _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
       CG * cg = create_CG(pm, size_of_box, numstates);
       double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
-      printf("P_max = %lf\n",min_P);
-        printf("%lf\n",min_P); 
-      //fprintf(file_Pmax,"%lf\n", min_P);
-      }
+      //printf("P_max = %lf\n",min_P);
+      //printf("%lf\n",min_P); 
+      //fprintf(file_Pmax,"%lf\n", min_P); 
       //fclose(file_Pmax);
-      }
+     if ((yy==0)||(yy==1)||(yy==2)){
+      sprintf(nameD,"dom_ent__t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_yy%d.d",pm->t[0],pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,yy);
+      FILE * dom_ent = fopen(nameD,"w");
+      sprintf(nameD,"S_E_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_yy%d.d",pm->t[0],pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,yy);
+      FILE * file_S_E = fopen(nameD,"w");
+      sprintf(nameD,"ent_entr_vs_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_bath%d_B%1.2f_yy%d.d",pm->t[0],pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,pm->num_bath_sites,beta,yy);
+      FILE * ent_entr_vs_t = fopen(nameD,"w");
+
+         double t =0;
+         int k;
+         int tot_its = time/delta_t;
+         _Complex double * psi; 
+         for(k=0; k < tot_its; k++)
+         {
+         double S_o=0,S_E=0;
+         _Complex double * psi_energy_basis=0;
+         t = delta_t*k;
+         psi = psit(c,evectors,energy,t);
+/*        
+         if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
+         else S_o = ObsEntropyEX(pm, cg, evectors, energy, psi);
+         double S_ent = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
+  */       
+         if (calc_FOE)
+         {
+            psi_energy_basis =  transform_pos_to_energy(eg, psi);
+            S_E = Sobs_fine_grain_E(psi_energy_basis);//FOE
+            fprintf(file_S_E,"%lf %lf\n",t, S_E);
+         }
+    /*     
+         fprintf(dom_ent,"%lf %lf\n",t, S_o );
+         fprintf(ent_entr_vs_t,"%lf %lf\n",t, S_ent);
+      */   
+        
+       }
+         
+       
+      fclose(dom_ent);
+      fclose(file_S_E);
+      fclose(ent_entr_vs_t);
+}
+}}
   
    int uu;
-  for(uu=0; uu < 1;uu++){
+  for(uu=0; uu <6;uu++){
     
    if (evolve_system)
    {
@@ -742,12 +782,12 @@ int main(int argc, char * argv[])
 
       double t;
       char nameD[128];
-      printf("Dominik entropy:\n time, S_obs\n");
-      sprintf(nameD, "dom_ent__t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs);
+      //printf("Dominik entropy:\n time, S_obs\n");
+      sprintf(nameD, "dom_ent__t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_uu%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,uu);
       FILE * dom_ent = fopen(nameD,"w");
-      sprintf(nameD, "S_E_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs);
+      sprintf(nameD, "S_E_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_uu%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,uu);
       FILE * file_S_E = fopen(nameD,"w");
-      sprintf(nameD, "ent_entr_vs_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs);
+      sprintf(nameD, "ent_entr_vs_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_uu%d.d", pm->t[0], pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,uu);
       FILE * ent_entr_vs_t = fopen(nameD,"w");
       FILE * file_Ps;
       if (print_dens) file_Ps = fopen("Ps.json","w");
@@ -773,13 +813,18 @@ int main(int argc, char * argv[])
             printf("min_P = %lf\n",min_P);
          }
          else
-         {
-            for (g=0; g <2  ; g++){
+         
+          {
+               printf("uu=%d\n",uu);
+               //if ((uu==2)||(uu==3)||(uu==4)){  //take this if out later
+             //  if (uu==5){
+               for (g=0; g <50  ; g++){
                double sfval = 0;
                sfval = Entropy_min(pm, cg, c, evectors, energy, eg);
                fprintf(file_Smin,"%lf\n", sfval);}
                fclose(file_Smin);
-         }
+          // }
+          }  
       }
       for (ggg=0; ggg < 1; ggg++){
          ull ** reg = calc_regions_x(pm);
@@ -792,19 +837,19 @@ int main(int argc, char * argv[])
          _Complex double * psi_energy_basis=0;
          t = delta_t*k;
          psi = psit(c,evectors,energy,t);
-         
-         if (t==0){
+        /* 
+         if ((t==0)||(t==35)){
          ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
-         double * density_matrix_0 = den(pm, psi,binary_basis_0);
-         printf("density_S[t=0]:\n");
+         double * density_matrix_t = den(pm, psi,binary_basis_0);
+         printf("density_S[t]:\n");
          for (int index=0;index < pm->L;index++){
-         printf("%lf\n",density_matrix_0[index]);}
-     
+         printf("%lf\n",density_matrix_t[index]);}}
+    
          //calculating Sent at t=0
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psi, pm,pm->num_bath_sites); 
          printf("S_ent(t=0) = %lf\n",S_ent_corres);}
    
-/*         
+ 
 
 
           if (t==0){
@@ -1025,7 +1070,6 @@ int main(int argc, char * argv[])
       }
    }
 
-free(pm);
 }
 #else
 int main(int argc, char * argv[])
@@ -1034,3 +1078,4 @@ int main(int argc, char * argv[])
   unitary_test(50,3);
 }
 #endif
+
