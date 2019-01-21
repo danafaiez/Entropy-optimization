@@ -658,13 +658,15 @@ int main(int argc, char * argv[])
       {
       _Complex double * psi_init = psi_thermal(numstates,beta,energy,evectors, &E_ave);
       _Complex double * c = coeff(psi_init, size_(psi_init), evectors);
-      CG * cg = create_CG(pm, size_of_box, numstates);
-      double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
+       CG * cg = create_CG(pm, size_of_box, numstates);
+      //double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
       //printf("P_max = %lf\n",min_P);
       //printf("%lf\n",min_P); 
       //fprintf(file_Pmax,"%lf\n", min_P); 
       //fclose(file_Pmax);
-     if ((yy==0)||(yy==1)||(yy==2)){
+      //if ((yy==2)||(yy==3)||(yy==4)){
+      //if (yy==0){ 
+      
       sprintf(nameD,"dom_ent__t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_yy%d.d",pm->t[0],pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,yy);
       FILE * dom_ent = fopen(nameD,"w");
       sprintf(nameD,"S_E_t%1.1f_tprime%1.2f_V%1.2f_Vp%1.2f_L%d_Ne%dsize_box%dnumCEs%d_B%1.2f_yy%d.d",pm->t[0],pm->t[1],pm->U,pm->Up,pm->L,pm->num_particles,size_of_box,numCoarseEs,beta,yy);
@@ -682,21 +684,45 @@ int main(int argc, char * argv[])
          _Complex double * psi_energy_basis=0;
          t = delta_t*k;
          psi = psit(c,evectors,energy,t);
-/*        
+         
          if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
          else S_o = ObsEntropyEX(pm, cg, evectors, energy, psi);
          double S_ent = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
-  */       
+         
+         //calculate the number density and the number of particles in bath and
+        //subsystem for specific Sent:
+         /*
+         if ( ((yy==0)&&(S_ent>1.667018))||((yy==1)&&(S_ent>1.677938))||((yy==2)&&(S_ent>1.647312))||((yy==3)&&(S_ent>1.669162))||((yy==4)&&(S_ent>1.646491))||((yy==5)&&(S_ent>1.664833)) ) {
+         printf("S_ent:%lf\n",S_ent);
+         ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
+         double * density_matrix_t = den(pm, psi,binary_basis_0);
+         //printf("density_S[t]:\n");
+         double np=0;
+         for (int index=0;index < pm->L;index++){
+         if (index >=0 && index<pm->L-pm->num_bath_sites){
+         np += density_matrix_t[index];}}
+         //printf("%lf\n",density_matrix_t[index]);}
+         //printf("number of particles in subsystem is: %lf\n", np);
+         double np_bath=pm->num_particles - np;
+         //printf("number of particles in bath is: %lf\n", np_bath);
+         double R = np_bath/np;
+         printf("yy=%d\n",yy);
+         printf("R = np_bath/np: %lf\n",R);
+         double D = np_bath-np;
+         printf("D = np_bath-np: %lf\n",D);
+         printf("\n");}
+         */
+  
          if (calc_FOE)
          {
             psi_energy_basis =  transform_pos_to_energy(eg, psi);
             S_E = Sobs_fine_grain_E(psi_energy_basis);//FOE
             fprintf(file_S_E,"%lf %lf\n",t, S_E);
          }
-    /*     
+         
          fprintf(dom_ent,"%lf %lf\n",t, S_o );
          fprintf(ent_entr_vs_t,"%lf %lf\n",t, S_ent);
-      */   
+        
         
        }
          
@@ -704,11 +730,15 @@ int main(int argc, char * argv[])
       fclose(dom_ent);
       fclose(file_S_E);
       fclose(ent_entr_vs_t);
+//} //(for if yy==...)
+
+
+} //fclose(file_Pmax);
 }
-}}
   
    int uu;
   for(uu=0; uu <6;uu++){
+
     
    if (evolve_system)
    {
@@ -744,7 +774,7 @@ int main(int argc, char * argv[])
       states = enumerate_r_basis(pm->L, pm->num_particles);
       numstates = size_(states);
       printf("Final number of states = %d\n", numstates);
-      //      FILE * evectors_in = read_header(evector_in_name, pm);
+      //FILE * evectors_in = read_header(evector_in_name, pm);
       PARAMS pm_in;
       double * evectors= read_evectors(evector_in_name, &pm_in);
       double * energy = read_energies(energy_in_name,&pm_in);
@@ -791,7 +821,7 @@ int main(int argc, char * argv[])
       FILE * ent_entr_vs_t = fopen(nameD,"w");
       FILE * file_Ps;
       if (print_dens) file_Ps = fopen("Ps.json","w");
-    //ull ** regions =  calc_regions( pm);
+      //ull ** regions =  calc_regions( pm);
       int k;
       int tot_its = time/delta_t; 
       int num_x = cg->L/cg->size_of_box;
@@ -799,7 +829,7 @@ int main(int argc, char * argv[])
       if (print_dens) fprintf(file_Ps,"[");
      
       //psi_e_b = transform_pos_to_energy(eg, psi);//pass on size of box as
-//parameter and calculate eg inside min.c since it depedns on psi given a particular phase  
+      //parameter and calculate eg inside min.c since it depedns on psi given a particular phase  
       int y, g, gg, ggg;
       sprintf(nameD, "file_Smin.d");
       FILE * file_Smin = fopen(nameD,"w");
@@ -816,14 +846,14 @@ int main(int argc, char * argv[])
          
           {
                printf("uu=%d\n",uu);
-               //if ((uu==2)||(uu==3)||(uu==4)){  //take this if out later
-             //  if (uu==5){
-               for (g=0; g <50  ; g++){
+               //if ((uu==3)||(uu==4)||(uu==5)){
+               //if (uu==5){
+               for (g=0; g <30  ; g++){
                double sfval = 0;
                sfval = Entropy_min(pm, cg, c, evectors, energy, eg);
                fprintf(file_Smin,"%lf\n", sfval);}
                fclose(file_Smin);
-          // }
+           //}
           }  
       }
       for (ggg=0; ggg < 1; ggg++){
@@ -837,8 +867,8 @@ int main(int argc, char * argv[])
          _Complex double * psi_energy_basis=0;
          t = delta_t*k;
          psi = psit(c,evectors,energy,t);
-        /* 
-         if ((t==0)||(t==35)){
+         /* 
+         if (t==0){
          ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
          double * density_matrix_t = den(pm, psi,binary_basis_0);
          printf("density_S[t]:\n");
@@ -848,27 +878,38 @@ int main(int argc, char * argv[])
          //calculating Sent at t=0
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psi, pm,pm->num_bath_sites); 
          printf("S_ent(t=0) = %lf\n",S_ent_corres);}
-   
- 
-
-
-          if (t==0){
-         _Complex double * ct = 0;
-          int ii;
-          double expE_t=0;
-          ct = coeff(psi, size_(psi), evectors);
-          for(ii=0;ii<numstates;ii++){
-          expE_t += energy[ii]*SQR(cabs(ct[ii]));}
-          printf("Energy of the whole box (t=0):\n");
-          printf("%lf\n",expE_t);}
-  */     
+         */     
 //          
 
  
          if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
          else S_o = ObsEntropyEX(pm, cg, evectors, energy, psi);
          double S_ent = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
-         if (calc_FOE) 
+        
+        //calculate the number density and the number of particles in bath and
+        //subsystem for specific Sent:
+       /* 
+         if ( (S_o>(3.886775)) || (t == 245) ){
+         //printf("S_ent:%lf\n",S_ent);
+         //if ((S_ent>1.582191)||(t==0) || (t==150) ||(t==100) ||(t==25) ||(t==115) ) {
+         printf("time:%lf\n",t);
+         printf("S_o:%lf\n",S_o);  
+         ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
+         double * density_matrix_t = den(pm, psi,binary_basis_0);
+         printf("density_S[t]:\n");
+         double np=0;
+         for (int index=0;index < pm->L;index++){
+         if (index >=0 && index<4){
+         np += density_matrix_t[index];}
+         printf("%lf\n",density_matrix_t[index]);
+         }
+         printf("number of particles in the first 4 sites is: %lf\n", np);
+         double np_bath=pm->num_particles - np;
+         printf("number of particles in bath is: %lf\n", np_bath);
+         //double R = np_bath/np;
+         //printf("R = np_bath/np: %lf\n",R);     
+      	   }*/
+        if (calc_FOE) 
          {
             psi_energy_basis =  transform_pos_to_energy(eg, psi);
             S_E = Sobs_fine_grain_E(psi_energy_basis);//FOE
@@ -1036,9 +1077,7 @@ int main(int argc, char * argv[])
             for(k=0; k < size_(psi_energy_basis);k++)
             {
                freearr_(psi_energy_basis[k]);
-            }
-
-         }
+            }}
 
          /*
          for(k=0; k < size_(psi_energy_basis);k++)

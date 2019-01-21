@@ -56,9 +56,8 @@ double * energy(ull * states, PARAMS * pm)
                   if (m_neigh >= 0 && m_neigh < L)
                   {
                      
-     //               if ((m>=0&&m<(L-bath)&&((nn[neigh][m][n])>=0)&&((nn[neigh][m][n])<(L-bath))) || (m>=(L-bath)&&m<(L)&&((nn[neigh][m][n])>=(L-bath))&&((nn[neigh][m][n])<(L))) ) 
-       //              {
-                     
+//                 if ((m>=0&&m<(L-bath)&&((nn[neigh][m][n])>=0)&&((nn[neigh][m][n])<(L-bath))) || (m>=(L-bath)&&m<(L)&&((nn[neigh][m][n])>=(L-bath))&&((nn[neigh][m][n])<(L))) )                    
+  //                  {
                      int sign = 1;
                      ull ket = states[ket_ind];
                      ull ket_anh = a(ket,m_neigh,L,&sign);

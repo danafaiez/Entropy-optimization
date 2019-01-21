@@ -150,7 +150,7 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          if (status)
              break;
          size = gsl_multimin_fminimizer_size (s);
-         status = gsl_multimin_test_size (size, 1e-9);
+         status = gsl_multimin_test_size (size, 1e-2);
          
          if (status == GSL_SUCCESS)
            {
@@ -160,8 +160,9 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
        }
 
     while (status == GSL_CONTINUE && iter < 2000000);
-    //printf ("Smin = %7.6f\n",s->fval);
-     printf ("%7.7f\n",s->fval);
+   //double Smax=-(s->fval);
+   //printf ("%7.6f\n",Smax);
+   printf ("%7.7f\n",s->fval);
 
 
 //Calculating the coarse_density//
@@ -189,22 +190,36 @@ printing the sum of the probabilities*
    printf("\n");
 
 
+*/
 //calculating number density operator using psi(s->x) from the last iteration in the minimization loop//
 
 //condition for calculating <N>//
-//if ((s->fval)<0.007){
-
- _Complex double * psi = psi_phi(s->x, coef, psiEs);
+if ((s->fval)<2.555223){
+ double np=0;
+ //printf("S max is:%lf\n",Smax);
+printf("S min is:%lf\n",s->fval); 
+_Complex double * psi = psi_phi(s->x, coef, psiEs);
  ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
  double * density_matrix = den(pm, psi, binary_basis);
  printf("density_S:\n");
  int index;
  for (index=0;index < pm->L;index++)
     {
-        printf("%lf\n",density_matrix[index]);
+       if (index >=0 && index<((pm->L)-(pm->num_bath_sites))){
+         np += density_matrix[index];}
+         printf("%lf\n",density_matrix[index]);
     }
-//}
+         printf("number of particles in the subsystem is: %lf\n", np);
+         double np_bath=pm->num_particles - np;
+         printf("number of particles in bath is: %lf\n", np_bath);
+         double D = np_bath-np;
+         printf("D = np_bath-np: %lf\n",D);
+   }       
+        
 
+
+//
+/*
 //calculating S_ent using s->x // 
 _Complex double * vec = psi_phi(s->x, coef, psiEs);
 //double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);

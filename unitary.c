@@ -208,7 +208,7 @@ double  newPsi(PSI_STATE * psi_state)
          }
         
         if (minimum_found){
-/*
+
        //PsiN for entropy//       
          newarr_(psiN,N);
          int y;      
@@ -221,21 +221,20 @@ double  newPsi(PSI_STATE * psi_state)
          }
        }
 
-         double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
-         printf ("S_EX(unitary maxP) = %5f\n",S_o); 
+/*         double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
+         printf ("S_EX = %5f\n",S_o); 
          //printf ("%5f\n",S_o);
 
         //observational entropy_FOE// 
-        _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, psiN);
+         _Complex double * psi_e_b_corres = transform_pos_to_energy(eg, psiN);
          double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);         
-        printf("S_FOE_corres = %lf\n",S_f_corres);
-       // printf("%lf\n",S_f_corres);
-
+         printf("S_FOE_corres = %lf\n",S_f_corres);
+         //printf("%lf\n",S_f_corres);
+*/
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
          printf("S_ent = %lf\n",S_ent_corres);
          //printf ("%5f\n",S_ent_corres);
  
-
 
 //calculating number density
       
@@ -246,7 +245,20 @@ double  newPsi(PSI_STATE * psi_state)
          for (index=0;index < pm->L;index++){
          printf("%lf\n",density_matrix[index]);}
 
- 
+         
+         double np=0;
+         for (int index=0;index < pm->L;index++){
+         if (index >=0 && index<pm->x_fin){
+         np += density_matrix[index];}
+         printf("%lf\n",density_matrix[index]);
+         }
+         
+         printf("number of particles btw 0 and x_fin is: %lf\n", np);
+         double np_rest=(pm->num_particles)-np;
+         printf("number of particles in the rest of the lattice is: %lf\n", np_rest);
+         printf("\n");
+
+/* 
 //calculating FOE of small or large region:
   //calculating psif using psiEs and region
 

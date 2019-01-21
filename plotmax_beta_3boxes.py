@@ -19,8 +19,9 @@ plt.scatter(sqrt_beta,maxp_loc3,s=30,color='r', marker="*",label='maximum probab
 plt.scatter(sqrt_beta,maxp_loc4,s=30,color='m', marker="h",label='maximum probability of localization in the first 4 sites')
 plt.scatter(sqrt_beta,maxp_loc5,s=30,color='b', marker="+",label='maximum probability of localization in the first 5 sites')
 plt.legend(loc='bottom left')
-ax.text(1.05,0.55, r'L=20 #particles=2', fontsize=8)
-plt.ylabel('maxP')
+#ax.text(1.05,0.55, r'L=20 #particles=2', fontsize=8)
+plt.ylabel('P$_{\mathrm{max}}$', fontsize=12)
 plt.xlabel('$\sqrt{\\beta}$')
+plt.savefig("PmaxvsBeta.eps",format='eps',bbox_inches='tight')
 plt.show()
 
