@@ -12,9 +12,12 @@ typedef struct {
        num_bath_sites,
        num_in_ensemble,//when calculating the microcanonical density matrix, how many separate energies to include
        num_of_Ss,//the number of separate entropies that are calculated
+       iter,
        max_bath_sites;//how many bath sites to go to when calculating S_ent
-       double t[2], U,Up;
-       int minimize_S_EX,minimize_Sent,minimize_foe;
+       double t[2], U,Up, beta_carlo, step_size;
+       int minimize_S_EX,minimize_Sent,minimize_foe,monte_ent,monte_Sxe;
+       int monte_moves;//= number of phases changed in one step
+       
 } PARAMS;
 
 typedef struct{

@@ -89,8 +89,8 @@ double my_f_ent(const gsl_vector * x, void * params)
       _Complex double * psi = psi_phi(x, coef, psiEs);
       double S_entang = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
       freearr_(psi);
-  
-     return -S_entang;
+     //printf("%lf\n",S_entang); 
+     return S_entang;
   
   }
 
@@ -105,7 +105,6 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, 
     int iter = 0;
     int status;
     double size;
-
 
     PARAM_MIN param_min;   
     param_min.coef = coef;
@@ -125,6 +124,8 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, 
      for (j=0; j<n; j++)
      {
       double rand = ran() * 2 * M_PI;
+      //double rr = ran();
+      //printf("randaom is %lf:",rr);
       gsl_vector_set (x, j,rand);
      }
 //Set initial step sizes to 1 //
@@ -138,7 +139,6 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, 
     if (pm->minimize_Sent == 1)   minex_func.f = my_f_ent;
  
     if (pm->minimize_foe == 1)   minex_func.f = my_f_fac;
-    
     minex_func.params = &param_min;  
     s = gsl_multimin_fminimizer_alloc (T, n);
     gsl_multimin_fminimizer_set (s, &minex_func, x, ss);
@@ -159,11 +159,13 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, 
          //printf ("%5d f() = %7.3f \n",iter, s->fval);
        }
 
-    while (status == GSL_CONTINUE && iter < 2000000);
+    while (status == GSL_CONTINUE && iter < 8000000);
    double Smax=-(s->fval);
    printf ("Smax=%7.6f\n",Smax);
    //printf ("%7.7f\n",s->fval);
-/*
+   //
+   
+ /*   
 //outputting eigenvalues of reduced density matrix:
 _Complex double * psi = psi_phi(s->x, coef, psiEs);
 int L = pm->num_sites;
@@ -196,7 +198,6 @@ for(num_bath_particles=0; num_bath_particles < num_bath_particles_max+1; num_bat
          free(eigenvalues);
         }
 
-
 //Calculating the overlap btw |n,0> state and psi:
 double p=0;
 double phi_f;
@@ -219,7 +220,7 @@ unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_part
 
   p += v*conj(v);}}
   printf("overlap with |n,0> is:%lf\n",p);
-*/
+
 //printing all binary-states and probabilities:
 double phi_f;
 int ii,jj;
@@ -274,7 +275,7 @@ int s21=0;
     printf("P|2,1>=%lf , n=%d\n",np_21, s21);
 
 
-/*
+
 //Calculating the coarse_density//
   _Complex double * psi = psi_phi(s->x, coef, psiEs); 
     double ** Ps = calc_PsEX(pm, cg, evalues, psiEs, psi);
@@ -301,12 +302,12 @@ printing the sum of the probabilities*
 //calculating number density operator using psi(s->x) from the last iteration in the minimization loop//
 
 //condition for calculating <N>//
-//if ((s->fval)<2.555223){
+if ((s->fval)<-2.3){
  double np=0;
  //printf("S max is:%lf\n",Smax);
-printf("S min is:%lf\n",s->fval); 
+printf("S max is:%lf\n",s->fval); 
 _Complex double * psi = psi_phi(s->x, coef, psiEs);
- //ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+ ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
  double * density_matrix = den(pm, psi, binary_basis);
  printf("density_S:\n");
  int index;
@@ -314,16 +315,15 @@ _Complex double * psi = psi_phi(s->x, coef, psiEs);
     {
        if (index >=0 && index<((pm->L)-(pm->num_bath_sites))){
          np += density_matrix[index];}
-         printf("%lf\n",density_matrix[index]);
+         //printf("%lf\n",density_matrix[index]);
     }
          printf("number of particles in the subsystem is: %lf\n", np);
          double np_bath=pm->num_particles - np;
-         printf("number of particles in bath is: %lf\n", np_bath);
+         //printf("number of particles in bath is: %lf\n", np_bath);
          double D = np_bath-np;
-         printf("D = np_bath-np: %lf\n",D);
-   //}       
+         //printf("D = np_bath-np: %lf\n",D);
+   }       
         
-
 //calculating S_ent using s->x // 
 //_Complex double * vec = psi_phi(s->x, coef, psiEs);
 //double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);

@@ -194,6 +194,7 @@ _Complex double * convert1to2(PARAMS * pm, _Complex double * psi1,int Linit, ull
 	 }
    }
    return psi2;
+
 }
  
 
@@ -270,26 +271,24 @@ _Complex double * psi_thermal(int  numstates, double beta, double * energy, doub
    _Complex double * psi;
    double norm = 0;
    double E = 0;
-   double p;
    newarr_(psi,numstates);
    int i,j;
+   printf("e itial is:%lf\n",e[10]);
    for(i=0;i < numstates;i++)
    {
       
      double w = exp(-0.5*beta*energy[i]); 
      double * evector = evectors+numstates*i;
-    _Complex double coef = c_gaussian_random();
-   //double coef = gaussian_random();
+     _Complex double coef = c_gaussian_random();
+     //double coef = gaussian_random();
       coef *= w;
       for(j=0;j < numstates;j++)
       {
          psi[j] += coef*evector[j];
       }
-      E += p*energy[i];
-      norm += p;
-      
+      E += energy[i];
    }
-   *e = E/norm;
+   *e = E/numstates;
    norm = 1.0/sqrt(L2((double *) psi, 2*numstates));
    for(j=0;j < numstates;j++)
    {
@@ -661,6 +660,7 @@ double ObsEntropyEX_micro(PARAMS * pm, CG * cg, double * psiEs, double * evalues
    double S_o=0.0;
    int n = size_(cg->states);
    int num_in_ensemble = size_(evectors);
+   //printf("num_in_ensemble=%d\n",num_in_ensemble);
    double ** Tr, *** Ps;
    newarr_(Ps,num_in_ensemble);
    Tr = calc_TrXE(pm, cg,evalues,  psiEs);

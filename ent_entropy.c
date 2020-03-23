@@ -231,31 +231,40 @@ double calc_ent_entropy_one_ev_complex_(_Complex double * evector, PARAMS * pm, 
 
    {
       _Complex double ** red_rho = red_dens_mat_complex(pm->num_sites, pm->num_particles, pm->num_bath_sites, binary_basis, pm->numstates,  evector);
+      
       for(num_bath_particles=0; num_bath_particles < num_bath_particles_max+1; num_bath_particles++)
       {
 	 double * eigenvalues;
 	 double S_=0;
 	 int i, n = basis_size[num_bath_particles];
+	 //printf("n=basis_size[num_bath_particles]=%d\n",n);
 	 calloc_(eigenvalues, n);
 	 diag_rho_cmplx(n, (double *) red_rho[num_bath_particles], eigenvalues);
 
 	 for(i=0; i < n; i++)
 	 {
+	    //printf("num_bath_particles:%d;",num_bath_particles);
+	    //printf("i:%d;\n",i);
+	   
 	    assert(eigenvalues[i] > -1.0e-10);
 	    if (eigenvalues[i] > 0)
 	       S_ += -eigenvalues[i] * log(eigenvalues[i]);
+	       //printf("%lf,",eigenvalues[i]);
 	 }
-
 	 S += S_;
 	 free(eigenvalues);
       }
+      //printf("\n");
+      int c;
+      
       for(i=0; i < num_bath_particles_max+1; i++)
 	  free(red_rho[i]);
       free(red_rho);  
- }
-
+   }
+   //printf(",\n");
    freearr_(binary_basis);
    free(basis_size);
+   
    return S;
 }
 
