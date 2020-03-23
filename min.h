@@ -13,9 +13,10 @@ _Complex double * psi_phi(const gsl_vector *x, _Complex double * coef, double * 
 double my_f_ex(const gsl_vector * x, void * params);
 double my_f_ent(const gsl_vector * x, void * params);
 double my_f_fac(const gsl_vector * x, void * params);
-double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, double * evalues, EG * eg);
-
+double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, double * evalues, EG * eg, _Complex double * psi_init);
+_Complex double * makeP(PARAMS * pm, double * evectors);
 double ** calc_PsEX(PARAMS * pm,CG * cg, double * evalues,double * psiEs, _Complex double * psi);
 double ** coarse_density(PARAMS * pm, CG *cg, double ** Ps);
 double * den(PARAMS * pm, _Complex double * psi, ull *  binary_basis);
+//_Complex double ** reduced_rho = red_dens_mat_complex(int L,int np,int bath, ull * bin, unsigned  long NN, _Complex double * psi);
 #endif//MIN_S_EX_H

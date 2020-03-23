@@ -1,10 +1,10 @@
-//This program minimized factorized observational entropy, observational entropy with position and energy coarse graining, or entanglement entropy//
 #include "locate_multivs.h"
 #include <gsl/gsl_multimin.h>
 #include <gsl/gsl_vector.h>
 #include "min.h"
 #include "ent_entropy.h"
 #include "energy_graining.h"
+
 //Unitary evolution of the wavefunction//
 _Complex double * psi_phi(const gsl_vector *x, _Complex double * coef, double * psiEs)
  {
@@ -69,7 +69,7 @@ double my_f_ex(const gsl_vector * x, void * params)
       free2darr_(cg->Ps);
       free2darr_(cg->density);
       freearr_(psi);
-      return S_o;
+      return -S_o;
 }
 //providing a function, minex_func.f for the minimization process; calculating entanglement entropy//
 double my_f_ent(const gsl_vector * x, void * params)
@@ -90,13 +90,13 @@ double my_f_ent(const gsl_vector * x, void * params)
       double S_entang = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
       freearr_(psi);
   
-     return S_entang;
+     return -S_entang;
   
   }
 
 
 //Minimization process start here//
-double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs, double * evalues,EG * eg)
+double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, double * evalues,EG * eg, _Complex double * psi_init)
 {
     const gsl_multimin_fminimizer_type *T = gsl_multimin_fminimizer_nmsimplex2;
     gsl_multimin_fminimizer *s = NULL;
@@ -115,7 +115,7 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
     param_min.cg = cg;
     param_min.eg = eg;
     int n = size_(coef);
-  
+     
      x = gsl_vector_alloc (n);
 //Initializing the phases equally//
 //   gsl_vector_set_all (x, 0.0);
@@ -154,20 +154,129 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef  ,double * psiEs,
          
          if (status == GSL_SUCCESS)
            {
-            //printf ("S converged to minimum at\n");
+            printf ("S converged to minimum at\n");
            }   
          //printf ("%5d f() = %7.3f \n",iter, s->fval);
        }
 
     while (status == GSL_CONTINUE && iter < 2000000);
-   //double Smax=-(s->fval);
-   //printf ("%7.6f\n",Smax);
-   printf ("%7.7f\n",s->fval);
+   double Smax=-(s->fval);
+   printf ("Smax=%7.6f\n",Smax);
+   //printf ("%7.7f\n",s->fval);
+/*
+//outputting eigenvalues of reduced density matrix:
+_Complex double * psi = psi_phi(s->x, coef, psiEs);
+int L = pm->num_sites;
+int np = pm->num_particles;
+int bath = pm->num_bath_sites; 
+unsigned  long NN = pm->numstates;
+ull * bin = enumerate_r_basis(L,np);
+int num_bath_particles;
+int num_bath_particles_max;
+num_bath_particles_max  = MIN(bath,np);
+ull * basis_size =  init_bases(bath, L,np);
 
 
+_Complex double ** reduced_rho = red_dens_mat_complex(L,np,bath, bin, NN, psi);
+
+for(num_bath_particles=0; num_bath_particles < num_bath_particles_max+1; num_bath_particles++)
+       {
+         double * eigenvalues;
+         double S_=0;
+         int i, n = basis_size[num_bath_particles];
+         calloc_(eigenvalues, n);
+         diag_rho_cmplx(n, (double *) reduced_rho[num_bath_particles], eigenvalues);
+
+         for(i=0; i < n; i++)
+         {
+            assert(eigenvalues[i] > -1.0e-10);
+            if (eigenvalues[i] > 0)
+            printf ("evalue[%f][%f]=%7.6f\n",eigenvalues[i],num_bath_particles,i);
+         }
+         free(eigenvalues);
+        }
+
+
+//Calculating the overlap btw |n,0> state and psi:
+double p=0;
+double phi_f;
+int ii,jj;
+int N = pm->numstates;
+unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+
+ for(jj=0;jj<N;jj++){ //going over all binary basis
+  unsigned long b = binary_basis[jj];
+
+  if (num_ones_in_range(0,pm->num_sites-pm->num_bath_sites , b) == pm->num_particles){
+ //if (num_ones_in_range(pm->num_sites-pm->num_bath_sites,pm->num_sites, b) == pm->num_particles){
+ 
+  _Complex double v = 0;
+    for(ii=0; ii < N ;ii++){ //going over Evector
+     double * evector = psiEs+N*ii;
+     phi_f = gsl_vector_get(s->x, ii);//getting the phase for evector[ii] 
+     _Complex double exp_iphi = cexp((1.0*I)*phi_f);
+     v+=conj(coef[ii])*exp_iphi*evector[jj];}
+
+  p += v*conj(v);}}
+  printf("overlap with |n,0> is:%lf\n",p);
+*/
+//printing all binary-states and probabilities:
+double phi_f;
+int ii,jj;
+int N = pm->numstates;
+unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+double np_n0 = 0;
+double np_0n = 0;
+double np_nhalf = 0;
+double np_12 = 0;
+double np_21 = 0;
+int sn0=0;
+int s0n=0;
+int sn2=0;
+int s12=0;
+int s21=0;
+ for(jj=0;jj<N;jj++){ //going over all binary basis
+
+  double p=0;
+  unsigned long b = binary_basis[jj];
+  _Complex double v = 0;
+  for(ii=0; ii < N ;ii++){ //going over Evector
+     double * evector = psiEs+N*ii;
+     phi_f = gsl_vector_get(s->x, ii);//getting the phase for evector[ii] 
+     _Complex double exp_iphi = cexp((1.0*I)*phi_f);
+     v+=conj(coef[ii])*exp_iphi*evector[jj];}
+    p += v*conj(v);
+    //print_binary(b, pm->num_sites);
+    //printf(" binary: %ld\n",b);
+    //printf("P for binary %lu is = %lf\n",b,p);
+    if (num_ones_in_range(0,pm->num_sites-pm->num_bath_sites,b) == pm->num_particles){
+    np_n0+=p;
+    sn0+=1;}
+    if (num_ones_in_range(pm->num_sites-pm->num_bath_sites,pm->num_sites,b) == pm->num_particles){
+    np_0n+=p;
+    s0n+=1;}
+    //if (num_ones_in_range(pm->num_sites-pm->num_bath_sites,pm->num_sites, b) == (pm->num_particles)/2){
+    //np_nhalf+=p;
+    //sn2+=1;}
+    
+    if (num_ones_in_range(pm->num_sites-pm->num_bath_sites,pm->num_sites,b) == 2){
+    np_12+=p;
+    s12+=1;}
+    if (num_ones_in_range(pm->num_sites-pm->num_bath_sites,pm->num_sites,b) == 1){
+    np_21+=p;
+    s21+=1;}
+    
+    }
+    printf("P|n,0>=%lf , n=%d\n",np_n0, sn0);
+    printf("P|0,n>=%lf , n=%d\n",np_0n, s0n);
+    //printf("P|n/2,n/2>=%lf,n=%d\n",np_nhalf, sn2);
+    printf("P|1,2>=%lf , n=%d\n",np_12, s12);
+    printf("P|2,1>=%lf , n=%d\n",np_21, s21);
+
+
+/*
 //Calculating the coarse_density//
-//calculate psi using the phase from the last iteration in the minimization loop (s->x)//
-/*  _Complex double * psi = psi_phi(s->x, coef, psiEs); 
+  _Complex double * psi = psi_phi(s->x, coef, psiEs); 
     double ** Ps = calc_PsEX(pm, cg, evalues, psiEs, psi);
     double ** density = coarse_density(pm, cg, Ps);
     double sum=0;
@@ -189,17 +298,15 @@ printing the sum of the probabilities*
    printf("%lf", sum);
    printf("\n");
 
-
-*/
 //calculating number density operator using psi(s->x) from the last iteration in the minimization loop//
 
 //condition for calculating <N>//
-if ((s->fval)<2.555223){
+//if ((s->fval)<2.555223){
  double np=0;
  //printf("S max is:%lf\n",Smax);
 printf("S min is:%lf\n",s->fval); 
 _Complex double * psi = psi_phi(s->x, coef, psiEs);
- ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+ //ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
  double * density_matrix = den(pm, psi, binary_basis);
  printf("density_S:\n");
  int index;
@@ -214,14 +321,11 @@ _Complex double * psi = psi_phi(s->x, coef, psiEs);
          printf("number of particles in bath is: %lf\n", np_bath);
          double D = np_bath-np;
          printf("D = np_bath-np: %lf\n",D);
-   }       
+   //}       
         
 
-
-//
-/*
 //calculating S_ent using s->x // 
-_Complex double * vec = psi_phi(s->x, coef, psiEs);
+//_Complex double * vec = psi_phi(s->x, coef, psiEs);
 //double S_ent_corres = calc_ent_entropy_one_ev_complex_(vec, pm, pm->num_bath_sites);
 
 //calculating S_ex using s->x // 
@@ -318,6 +422,41 @@ printf("S_f_corres = %lf\n",S_f_corres);
       }
   return rho;
   }
+/*
+_Complex double ** reduced_dens_mat_complex(int num_sites, int num_particles, int 
+num_bath_sites, ull * binary_basis, unsigned  long nbasis, _Complex double * evector)
+{
+
+   _Complex double ** rho;
+   int num_bath_particles_max  = MIN(num_bath_sites, num_particles);
+   int i;
+   unsigned long mask;
+   unsigned long base=0;
+   ull * basis_size =  init_bases(num_bath_sites, num_sites, num_particles);
+
+   rho = callocate_rho_cmplx(num_bath_particles_max, basis_size);
+   mask  = ((1 << num_bath_sites) -1) << (num_sites-num_bath_sites);
 
 
-
+   while (base < nbasis)
+ {
+      int nbath = num_ones(mask&binary_basis[base]);
+      int count = 0;
+      if (basis_size[nbath] == 0)
+        {
+          base++;
+          continue;
+        }
+      for(i=0; i < basis_size[nbath];i++)
+      {
+         int j;
+         for(j=0; j <= i;j++)
+         {
+            rho[nbath][count] += evector[base+i]*conj(evector[base+j]);
+            count++;
+         }
+      }
+      base += basis_size[nbath];
+   }
+   free(basis_size);
+   return rho;}*/

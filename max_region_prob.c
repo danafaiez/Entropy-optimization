@@ -56,8 +56,10 @@ ull ** calc_regions_x(PARAMS * pm)
 for(i=0; i < pm->numstates; i++)
    {
       unsigned long s = binary_basis[i];
-      if (num_ones_in_range(pm->x_init, pm->x_fin, s) == pm->num_particles)
-      {
+      //if (num_ones_in_range(pm->x_init, pm->x_fin, s) == pm->num_particles)
+      
+      if (num_ones_in_range(pm->x_init, pm->x_fin, s) == 1)
+       {
          appendarr_(regions[IN],i);
       }
       else
@@ -166,11 +168,11 @@ int regional_prob_max(PARAMS * pm, CG * cg, _Complex double * coef ,double * psi
 
 //calculate psi using the phase from the last iteration in the minimization loop (s->x)//
     _Complex double * psi = psi_phi_x(s->x, coef, psiEs);//calculate psi using the x from the last iteration in the minimization loop 
-
+/*
 //calculating entropy_EX given psi(s->x)//
     double S_o = ObsEntropyEX(pm, cg, psiEs, evalues, psi);
     printf ("S_EX from max_prob = %5f\n",S_o);
-/*
+*/
 //calculating entropy_ent given psi(s->x)//
     double Ent_ent = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
     printf ("S_ent from max_prob = %5f\n",Ent_ent);
@@ -184,7 +186,7 @@ int regional_prob_max(PARAMS * pm, CG * cg, _Complex double * coef ,double * psi
      {
         printf("%lf\n",dens_S_EX[index]); 
      }
-*/
+     
      gsl_vector_free(x);
      gsl_vector_free(ss);
      gsl_multimin_fminimizer_free (s);

@@ -61,6 +61,15 @@ for i in range(1,5):
        plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='bs',elinewidth=0.9,
                 ms=3,capsize=2,label='R=Sent(min)/Sent(ave)'if i == 1 else "")
 
+for i in range(1,5):
+       a = loadtxt(min_Sent[i])
+       R_mean= mean(a)
+       R_min= min(a)
+       R_max= max(a)
+
+       plt.errorbar(L[i-1],R_mean, yerr=np.array([[R_mean-R_min ,R_max-R_mean]]).T,fmt='rs',elinewidth=0.9, ms=3,capsize=2,label='R=Sent(min)'if i == 1 else "")
+
+
        R.append(R_mean)
 for i in range(1,5):
        a = loadtxt(Pmax[i])

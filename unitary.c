@@ -150,6 +150,7 @@ double  newPsi(PSI_STATE * psi_state)
    double * energy = psi_state->energy;
    CG * cg = psi_state->cg;
    EG * eg = psi_state->eg; 
+   complx * coef = psi_state->coef;
    //FILE * filesxe = psi_state->file;
    int i,j,count,countmax=40000;
    int N = psi_state->N;
@@ -220,7 +221,6 @@ double  newPsi(PSI_STATE * psi_state)
           psiN[y] += a[iE]*z[iE]*evector[y];
          }
        }
-
 /*         double S_o = ObsEntropyEX(pm, cg, psiEs, energy, psiN);
          printf ("S_EX = %5f\n",S_o); 
          //printf ("%5f\n",S_o);
@@ -230,12 +230,12 @@ double  newPsi(PSI_STATE * psi_state)
          double S_f_corres = Sobs_fine_grain_E(psi_e_b_corres);         
          printf("S_FOE_corres = %lf\n",S_f_corres);
          //printf("%lf\n",S_f_corres);
-*/
+*/         
          double S_ent_corres = calc_ent_entropy_one_ev_complex_(psiN, pm, pm->num_bath_sites);
          printf("S_ent = %lf\n",S_ent_corres);
          //printf ("%5f\n",S_ent_corres);
  
-
+/*
 //calculating number density
       
          ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
@@ -257,8 +257,47 @@ double  newPsi(PSI_STATE * psi_state)
          double np_rest=(pm->num_particles)-np;
          printf("number of particles in the rest of the lattice is: %lf\n", np_rest);
          printf("\n");
+*/ 
+//calculating prob for each binary state
+double phi_f;
+int ii,jj;
+int N = numstates;
+double np_n0 = 0;
+double np_0n = 0;
+double np_nhalf = 0;
+int sn0=0;
+int s0n=0;
+int sn2=0;
+unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+ for(jj=0;jj<N;jj++){ //going over all binary basis
 
-/* 
+  double p=0;
+  unsigned long b = binary_basis[jj];
+  _Complex double v = 0;
+  for(ii=0; ii < N ;ii++){ //going over Evector
+     double * evector = psiEs+N*ii;
+     //_Complex double exp_iphi = cexp((1.0*I)*z[ii]);
+     v+=conj(a[ii])*(z[ii])*evector[jj];}
+   p += v*conj(v);
+   //print_binary(b, pm->num_sites);
+   //printf("P for binary %lu is = %lf\n",b,p);
+    if (num_ones_in_range(pm->x_init,pm->x_fin, b) == pm->num_particles){
+    np_n0+=p;
+    sn0+=1;}
+    if (num_ones_in_range(pm->x_init,pm->x_fin, b) == 0){
+    np_0n+=p;
+    s0n+=1;}
+    if (num_ones_in_range(pm->x_init,pm->x_fin, b) == (pm->num_particles)/2){
+    np_nhalf+=p;
+    sn2+=1;}
+    }
+   
+    printf("P|n,0>=%lf , n=%d\n",np_n0, sn0);
+    printf("P|0,n>=%lf , n=%d\n",np_0n, s0n);
+    printf("P|n/2,n/2>=%lf , n=%d\n",np_nhalf, sn2);
+/*
+
+
 //calculating FOE of small or large region:
   //calculating psif using psiEs and region
 
@@ -361,7 +400,7 @@ _Complex double * c_W=0;
 complx ** makeEN(PARAMS * pm, double * evectors)
 {
    unsigned long long * binary_basis = enumerate_r_basis(pm->num_sites, pm->num_particles);
-   ull * regions = (calc_regions(pm))[0];
+   //ull * regions = (calc_regions(pm))[0];
    int i,j;
    int N = pm->numstates;
    complx ** W;
@@ -373,9 +412,7 @@ complx ** makeEN(PARAMS * pm, double * evectors)
    for(j=0;j<N;j++)
    {
       unsigned long s = binary_basis[j];
-      //if (num_ones_in_range(0, pm->num_bath_sites, s) == pm->num_particles)
      if (num_ones_in_range(x_begin, x_begin+pm->num_bath_sites, s) == pm->num_particles)
-     // if (num_ones_in_range(pm->num_sites-pm->num_bath_sites ,pm->num_sites, s) == pm->num_particles)
        {
    // W[i][j] = evector[j];
     W[i][j] = 0;
@@ -713,7 +750,7 @@ ull ** calc_regionsEs(PARAMS * pm)
    {
       unsigned long s = binary_basis[i];
       if (num_ones_in_range(pm->x_init, pm->x_fin, s) == pm->num_particles) 
-      {
+       {
          appendarr_(regions[IN],i);
       }
       else
@@ -808,6 +845,7 @@ double unitary_min(CG *cg, PARAMS * pm,  complx *coef, double * psiEs, double * 
    psi_state.a = cabs_array(coef);
    double ** J = makeJ(&psi_state);
    psi_state.J = J;
+   psi_state.coef= coef; 
    //psi_state.file=filesxe;
  
    int size_of_box = cg->size_of_box;

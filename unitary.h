@@ -14,6 +14,7 @@ typedef struct {
                  double * energy;
                  CG * cg;
                  EG * eg;
+                 complx * coef;
 } PSI_STATE;
 
 typedef struct {
