@@ -5,7 +5,7 @@
 * [Publications](#Publications)
 * [Resources](#Resources)	 
 
-![Hist Sent](github_plot/sentpic_copy.pdf)
+![Hist Sent](github_plot/Sent_histogram.png)
 
 
 ## Repository
