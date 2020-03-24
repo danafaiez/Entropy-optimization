@@ -6,7 +6,11 @@
 * [Resources](#Resources)	 
 
 ![Hist Sent](github_plot/Sent_histogram.png)
+![Hist Sobs](github_plot/Sobs_histogram.png)
 
+
+![Hist Sent](github_plot/Sent_histogram.png)
+![Hist Sent](github_plot/Sent_histogram.png)
 
 ## Repository
    This repository contains c and python codes for the _entropy fluctuation thesis project_ published in
