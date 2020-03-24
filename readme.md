@@ -5,12 +5,12 @@
 * [Publications](#Publications)
 * [Resources](#Resources)	 
 
+![Hist Sent](github_plot/Hist_Sent_new_copy.png)
 ## Repository
    This repository contains c and python codes for the _entropy fluctuation thesis project_ published in
    papers listed under [Publications](#Publications).
 
 ## Illustrations
-![Hist Sent](github_plot/Hist_Sent_new_copy.png)
 
 
 ## Collaborators
