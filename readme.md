@@ -12,9 +12,6 @@
    papers listed under [Publications](#Publications).
 
 ## Illustrations
-![max_ave_min_Sent_size](github_plot/max_ave_min_Sent_size.png)
-![max_ave_min_Sobs_size](github_plot/max_ave_min_Sxe_size.png)
-
 
 ## Collaborators
    This project is in collaboration with Joshua Deutsch, Dominik \v{S}afr\'{a}nek, and Anthony Aguirre at the University of California, Santa Cruz physics department. .  
