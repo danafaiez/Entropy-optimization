@@ -10,7 +10,7 @@
    papers listed under [Publications](#Publications).
 
 ## Illustrations
-![Hist Sent](github_plot/Hist_Sent_new_copy.pdf)
+![Hist Sent](github_plot/Hist_Sent_new_copy.png)
 
 
 ## Collaborators
