@@ -13,7 +13,7 @@
 
 ## Illustrations
 ![max_ave_min_Sent_size](github_plot/max_ave_min_Sent_size.png)
-![max_ave_min_Sobs_size](github_plot/max_ave_min_Sobs_size.png)
+![max_ave_min_Sobs_size](github_plot/max_ave_min_Sxe_size.png)
 
 
 ## Collaborators
