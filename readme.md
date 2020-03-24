@@ -12,9 +12,14 @@
 ## Illustrations
 
 
-![WMD imshow plot](github_plots/wmd_imshow1.png) 
-![BMD imshow plot](github_plots/bmd_imshow1.png) 
+![Hist Sent](github_plot/Hist_Sent_new_copy.pdf) 
+![Hist Sobs](github_plot/Hist_Sent_new_copy.pdf) 
 
+![max-ave-min Sent vs L](github_plot/max-ave-min-Sent_L_copy.pdf) 
+![max-ave-min Sobs vs L](github_plot/max-ave-min-Sxe-L_copy.pdf) 
+ 
+![Sent macrostate illustration](github_plot/sentpic_copy.pdf) 
+![Sobs macrostate illustration](github_plot/sxepic_copy.pdf) 
 
 ## Collaborators
    This project is in collaboration with Joshua Deutsch, Dominik \v{S}afr\'{a}nek, and Anthony Aguirre at the University of California, Santa Cruz physics department. .  
