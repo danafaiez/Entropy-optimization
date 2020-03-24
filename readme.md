@@ -12,9 +12,7 @@
    papers listed under [Publications](#Publications).
 
 ## Illustrations
-
-![Hist Sobs](github_plot/Sobs_histogram.png)
-![Hist Sent](github_plot/Sent_histogram.png)
+![max_ave_min_Sent_size](github_plot/max_ave_min_Sent_size.png)
 
 
 ## Collaborators
