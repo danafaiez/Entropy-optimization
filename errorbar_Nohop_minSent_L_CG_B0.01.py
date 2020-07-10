@@ -40,6 +40,7 @@ for i in range(0,5):
         ent_std=[]
         ent_std.append(np.std(min))
         plt.errorbar(L[i],Rent_mid,yerr=np.array([ent_std,ent_std]).T,fmt='*',color='k',elinewidth=0.6,ms=4,capsize=2,label=r'$\mathrm{min(S_{ent})};\Delta=4$' if i == 1 else "")
+
 #plotting the max only
 for i in range(0,5):
         max = loadtxt(Sent_max[i])

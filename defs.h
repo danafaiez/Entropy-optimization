@@ -153,9 +153,9 @@ void reverse_int_array(int * a, int length);
 #define QUINT(x) ((x)*(x)*(x)*(x)*(x))
 
 #define SWAP(a,b) do {  	\
-   typeof(a) tmp = (a); 	\
+   typeof(a) __tmp = (a); 	\
    (a)=b;  			\
-   (b)=tmp;  			\
+   (b)=__tmp;  			\
 } while(0) 
 
 #define ran() (random()/(RAND_MAX+1.0))
@@ -350,6 +350,7 @@ void printarr_(FILE * file, double * arr);
 void printarr(double * arr);
 void print2darr_(FILE * file, double ** arr);
 void print2darr(double ** arr);
+int int_comp(const void * i, const void * j);
 
 
 #endif// DEFS_H

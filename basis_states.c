@@ -282,6 +282,13 @@ _Complex double * psi_thermal(int  numstates, double beta, double * energy, doub
      _Complex double coef = c_gaussian_random();
      //double coef = gaussian_random();
       coef *= w;
+      //double re=creal(coef);
+      //double im=cimag(coef);
+      //printf("re: %lf",re);
+      //printf("im: %lf",im);
+      //printf(" %lf\n",sqrt(re*re+im*im));
+
+      //printf("L2(coef) = %lf\n",coef((double *) coef,2*numstates));
       for(j=0;j < numstates;j++)
       {
          psi[j] += coef*evector[j];
@@ -296,6 +303,52 @@ _Complex double * psi_thermal(int  numstates, double beta, double * energy, doub
    }
    return psi;
 }
+#endif
+//#else
+#if 0
+_Complex double * psi_thermal(int  numstates, double beta, double * energy, double * evectors, double * e)
+{
+  double Emean = 0;
+   
+   _Complex double * psi;
+   double norm = 0;
+   double E = 0;
+   newarr_(psi,numstates);
+   int i,j;
+   int q = 1495;
+   int i_min= q;
+   int i_max =  numstates-q;
+   double coef;
+
+   for(i= 0;  i < numstates;  i++)
+   {
+     double * evector = evectors+numstates*i;
+       if(i<i_min || i>i_max) 
+       coef = 0;
+       else{
+         double w = exp(-0.5*beta*energy[i]);
+         double * evector = evectors+numstates*i;
+	_Complex double coef = c_gaussian_random();
+       }
+      for(j=0;j < numstates;j++)
+      {
+         psi[j] += coef*evector[j];
+      }
+      E += energy[i];
+   }
+   *e = E/numstates;
+
+   norm = 1.0/sqrt(L2((double *) psi, 2*numstates));
+   for(j=0;j < numstates;j++)
+   {
+      psi[j] *= norm;
+   }
+   printf("\n");
+   printf("initial L2: %lf\n",L2((double *) psi, 2*numstates));
+   return psi;
+
+}
+
 #endif
 
 _Complex double * coeff(_Complex double * psi, int n, double * h)

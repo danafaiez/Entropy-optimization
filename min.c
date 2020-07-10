@@ -90,7 +90,7 @@ double my_f_ent(const gsl_vector * x, void * params)
       double S_entang = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites);
       freearr_(psi);
      //printf("%lf\n",S_entang); 
-     return S_entang;
+     return -S_entang;
   
   }
 
@@ -124,8 +124,8 @@ double Entropy_min(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, 
      for (j=0; j<n; j++)
      {
       double rand = ran() * 2 * M_PI;
-      //double rr = ran();
-      //printf("randaom is %lf:",rr);
+      double rr = ran();
+      printf("randaom is %lf:",rr);
       gsl_vector_set (x, j,rand);
      }
 //Set initial step sizes to 1 //

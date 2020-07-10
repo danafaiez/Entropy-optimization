@@ -187,6 +187,7 @@ int main(int argc, char * argv[])
    int monte_carlo = 0;
    int monte_ent;
    int monte_Sxe;
+   int monte_density;
 
    int maximize_reg_prob = 0;
    int calc_entropy = 0;
@@ -378,6 +379,15 @@ int main(int argc, char * argv[])
          i += 2;
       }
    
+   else if (strstr (argv[i], "-monte")  &&  strstr (argv[i], "density"))
+      {
+         if (sscanf(argv[i+1],"%d", &pm->monte_density) != 1)
+         {
+             printf("monte_density  messed up\n");
+             exit(2);
+         }
+         i += 2;
+      }
    else if (strstr (argv[i], "-monte")  &&  strstr (argv[i], "Sxe"))
       {
          if (sscanf(argv[i+1],"%d", &pm->monte_Sxe) != 1)
@@ -834,15 +844,15 @@ for(uu=0; uu <1;uu++){
       int y, g, gg, ggg;
       //sprintf(nameD, "file_Smin.d");
       //FILE * file_Smin = fopen(nameD,"w");
-      /* 
+       
       //calculating <E> from psi1
       int ii;
       double expE=0;
       for(ii=0;ii<pm->numstates;ii++){
       expE += energy[ii]*SQR(cabs(c[ii]));}
-      printf("mean energy:\n");
-      printf("%lf\n",expE);
-      */
+      //printf("mean energy:\n");
+      //printf("%lf\n",expE);
+      
       //unitary minimization:
       if (minimize_unitary){
          double min_P =  unitary_min(cg, pm, c, evectors,energy,eg);
@@ -891,7 +901,12 @@ for(uu=0; uu <1;uu++){
             t = delta_t*k;
             psi = psit(c,evectors,energy,t);
             int fc,f=0;
-            //printf("t==%f\n",t);
+            
+	    //ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
+	    //double * density_matrix_t = den(pm, psi,binary_basis_0);
+	    //printf("%lf\n",density_matrix_t[2]); 
+	    
+	    //printf("t==%f\n",t);
             //printing out psi at every time step: 
             /*
                for(f=0;f<pm->numstates;f++)
@@ -914,13 +929,14 @@ for(uu=0; uu <1;uu++){
                printf("\n");
                } 
 
-            //ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
-            //double * density_matrix_t = den(pm, psi,binary_basis_0);
-            //printf("density_S[t]:\n");
-            //for (int index=0;index < pm->L;index++){
-            //printf("%lf\n",density_matrix_t[index]);}
-
-            //calculating Sent at t=0
+            ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
+            double * density_matrix_t = den(pm, psi,binary_basis_0);
+            printf("density_S[t]:\n");
+            for (int index=0;index < pm->L;index++){
+            printf("%lf\n",density_matrix_t[index]);}
+	    printf("%lf\n",density_matrix_t[0]); 
+            
+	    //calculating Sent at t=0
             double S_ent_corres = calc_ent_entropy_one_ev_complex_(psi, pm,pm->num_bath_sites); 
             printf("S_ent(t==0) = %lf\n",S_ent_corres);
 
@@ -976,7 +992,11 @@ for(uu=0; uu <1;uu++){
          //printf("P|1,2>=%lf , n=%d\n",np_12, s12);
          //printf("P|2,1>=%lf , n=%d\n",np_21, s21);
 
-         */ 
+            ull * binary_basis_0 = enumerate_r_basis(pm->num_sites,pm->num_particles);
+            double * density_matrix_t = den(pm, psi,binary_basis_0);
+	    printf("%lf \n",density_matrix_t[15]);
+            	    
+         */
             if (calc_obs_xe) S_o = ObsEntropyXE(pm, cg, evectors, energy, c, t);
             else S_o = ObsEntropyEX(pm, cg, evectors, energy, psi); 
            double S_ent = calc_ent_entropy_one_ev_complex_(psi, pm, pm->num_bath_sites); 

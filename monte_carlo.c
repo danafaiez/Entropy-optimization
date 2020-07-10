@@ -86,7 +86,6 @@ double monte_func(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, d
     param_min.cg = cg;
     param_min.eg = eg;
     int n = size_(coef);
-    
     int bath = pm->num_bath_sites;
     int iter = pm->iter;
     double step_size = pm->step_size;
@@ -114,6 +113,10 @@ double monte_func(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, d
     double S_init;
     if (pm->monte_ent == 1)   S_init = S_ent(psi, &param_min);
     if (pm->monte_Sxe == 1)   S_init = S_xe(psi, &param_min);
+    if (pm->monte_density == 1){
+    ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+    double * density_init = den(pm, psi, binary_basis);
+    S_init = density_init[0];}
 
     _Complex double * psi_old;
     newarr_(psi_old,n);
@@ -143,7 +146,10 @@ double monte_func(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, d
        double S_attempt; 
        if (pm->monte_ent == 1)  S_attempt = S_ent(psi, &param_min);
        if (pm->monte_Sxe == 1)  S_attempt = S_xe(psi, &param_min);
-       
+       if (pm->monte_density == 1){
+	  ull * binary_basis = enumerate_r_basis(pm->num_sites,pm->num_particles);
+	  double * density_init = den(pm, psi, binary_basis);
+	  S_attempt = density_init[0];}
        double deltaS = S_attempt - S_init;
 
        //condition for rejecting
@@ -159,14 +165,18 @@ double monte_func(PARAMS * pm, CG * cg, _Complex double *coef, double * psiEs, d
 	  accept += 1;
 	  S_init = S_attempt;
        }
+       
        if (1 || iteration % 1000 ==0) {
-           fprintf(monte_carlo_entropy_data,"%lf\n", S_init);
+         fprintf(monte_carlo_entropy_data,"%lf\n", S_init);
+	//fprintf(monte_carlo_entropy_data,"%d %lf\n",iteration ,S_init);
+
        }
 
-       if (iteration % 5000 ==0) {
+       if (iteration % 10000 ==0) {
 	  c = (float)accept/(float)(iteration+1);
 	  printf("acceptance ratio at iteration %d is %lf\n",iteration, c);
           printf("in monte_func: L2(psi) = %lf\n",L2((double *) psi,2*n));
+	  //printf("%d %lf\n",iteration, c);
        }
        freearr_(indices);
     }

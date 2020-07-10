@@ -16,6 +16,7 @@ double * energy(ull * states, PARAMS * pm)
    double Up = pm->Up;
    int nn[2][L][2];
    int numstates = size_(states);
+
    double *h;
    newarr_(h,(numstates*numstates));
    HTABLE * hash = create_hash(states);
